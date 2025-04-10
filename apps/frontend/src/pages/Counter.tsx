@@ -1,0 +1,17 @@
+import { FC, useState } from "react";
+
+export const Counter: FC = () => {
+    const [count, setCount] = useState(0)
+    
+    return (
+        
+            <div className='flex flex-col items-center justify-center text-center gap-2'>
+                <h1>Jaspers</h1>
+                <div>
+                <button className='px-2 py-1 rounded bg-neutral-200 text-black hover:bg-neutral-300 transition-colors' onClick={() => setCount((count) => count + 1)}>
+                    Count is {count}
+                </button>
+                </div>
+            </div>
+    )
+}

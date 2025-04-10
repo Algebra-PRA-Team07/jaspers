@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@jaspers/backend": "workspace:1.0.0",
+    "@jaspers/models": "workspace:^",
+    "@tanstack/react-query": "^5.72.2",
+    "@trpc/client": "^11.0.4",
+    "@trpc/tanstack-react-query": "^11.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router": "^7.5.0",
     "sass": "^1.86.3"
   },
   "devDependencies": {
@@ -26,7 +32,7 @@
     "globals": "^15.15.0",
     "postcss": "^8.5.3",
     "tailwindcss": "3",
-    "typescript": "~5.7.2",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
   }

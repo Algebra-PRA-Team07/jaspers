@@ -1,19 +1,38 @@
 import { useState } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createTRPCClient, httpBatchLink } from '@trpc/client';
+import { TRPCProvider } from './utils/trpc';
+import { AppRouter } from '@jaspers/backend';
+import { RouterProvider } from "react-router";
+import { MainRoutes } from './routes/routes';
+
+let queryClient: QueryClient | undefined = undefined;
+
+const getQueryClient = () => {
+    if (!queryClient) {
+        queryClient = new QueryClient();
+    }
+    return queryClient;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const queryClient = getQueryClient();
+  const [trpcClient] = useState(() =>
+    createTRPCClient<AppRouter>({
+      links: [
+        httpBatchLink({
+          url: 'http://localhost:3000',
+        }),
+      ],
+    }),
+  );
 
   return (
-    <div className='w-full h-screen flex items-center justify-center text-center bg-slate-900'>
-      <div className='flex flex-col items-center justify-center text-center gap-2'>
-        <h1>Jaspers</h1>
-        <div>
-          <button className='px-2 py-1 rounded bg-neutral-200 text-black hover:bg-neutral-300 transition-colors' onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-        </div>
-      </div>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+        <RouterProvider router={MainRoutes} />
+      </TRPCProvider>
+    </QueryClientProvider>
   )
 }
 
