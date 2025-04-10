@@ -1,4 +1,5 @@
 import pluginJs from "@eslint/js";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import eslintPluginSimpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintPluginSonarJs from "eslint-plugin-sonarjs";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
@@ -8,8 +9,9 @@ import tseslint from "typescript-eslint";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-    { files: ["./src/**/*.{js,mjs,cjs,ts}"] },
+    { files: ["./src/**/*.{js,mjs,cjs,ts,tsx}"] },
     { languageOptions: { globals: globals.browser } },
+    eslintPluginPrettierRecommended,
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
     eslintPluginUnicorn.configs["flat/recommended"],

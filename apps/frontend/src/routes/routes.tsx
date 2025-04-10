@@ -8,15 +8,19 @@ export const MainRoutes = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
-        children: [{
-            path: "counter",
-            element: <Counter />
-        }, {
-            path: "gates",
-            element: <Gates />
-        }, {
-            index: true,
-            element: <Navigate to={"counter"} replace />
-        }] satisfies RouteObject[],
+        children: [
+            {
+                path: "counter",
+                element: <Counter />,
+            },
+            {
+                path: "gates",
+                element: <Gates />,
+            },
+            {
+                index: true,
+                element: <Navigate to={"counter"} replace />,
+            },
+        ] satisfies RouteObject[],
     },
 ]);

@@ -18,24 +18,24 @@ const getQueryClient = () => {
 };
 
 function App() {
-  const queryClient = getQueryClient();
-  const [trpcClient] = useState(() =>
-    createTRPCClient<AppRouter>({
-      links: [
-        httpBatchLink({
-          url: "http://localhost:3000",
+    const queryClient = getQueryClient();
+    const [trpcClient] = useState(() =>
+        createTRPCClient<AppRouter>({
+            links: [
+                httpBatchLink({
+                    url: "http://localhost:3000",
+                }),
+            ],
         }),
-      ],
-    }),
-  );
+    );
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        <RouterProvider router={MainRoutes} />
-      </TRPCProvider>
-    </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+                <RouterProvider router={MainRoutes} />
+            </TRPCProvider>
+        </QueryClientProvider>
+    );
 }
 
 export default App;
