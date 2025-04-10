@@ -1,0 +1,10 @@
+{
+  "name": "jaspers",
+  "version": "1.0.0",
+  "repository": "https://github.com/Algebra-PRA-Team07/jaspers",
+  "private": true,
+  "scripts": {
+      "preinstall": "npx only-allow pnpm",
+      "typecheck": "pnpm -r typecheck"
+  }
+}
