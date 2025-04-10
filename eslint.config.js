@@ -82,6 +82,12 @@ export default [
             "unicorn/consistent-destructuring": "off",
             "unicorn/no-await-expression-member": "off",
             "sonarjs/no-duplicate-string": ["error", { threshold: 8 }],
+            "unicorn/prevent-abbreviations": [
+                "error",
+                {
+                    checkFilenames: false,
+                },
+            ],
         },
     },
 ];
