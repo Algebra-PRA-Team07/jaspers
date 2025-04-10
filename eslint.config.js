@@ -1,5 +1,7 @@
 import pluginJs from "@eslint/js";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 import eslintPluginSimpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintPluginSonarJs from "eslint-plugin-sonarjs";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
@@ -7,6 +9,7 @@ import eslintPluginUnusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
+// hacky combination of normal and react lint rules
 /** @type {import('eslint').Linter.Config[]} */
 export default [
     { files: ["./src/**/*.{js,mjs,cjs,ts,tsx}"] },
@@ -20,6 +23,8 @@ export default [
             "simple-import-sort": eslintPluginSimpleImportSort,
             sonarjs: eslintPluginSonarJs,
             "unused-imports": eslintPluginUnusedImports,
+            "react-hooks": reactHooks,
+            "react-refresh": reactRefresh,
         },
         rules: {
             quotes: ["error", "double"],
@@ -88,6 +93,8 @@ export default [
                     checkFilenames: false,
                 },
             ],
+            ...reactHooks.configs.recommended.rules,
+            "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
         },
     },
 ];

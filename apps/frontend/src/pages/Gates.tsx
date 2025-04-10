@@ -1,6 +1,6 @@
 import { Gate } from "@jaspers/models";
 import { useQuery } from "@tanstack/react-query";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import { useTRPC } from "../utils/trpc";
 
@@ -20,6 +20,10 @@ export const Gates: FC = () => {
     const trpc = useTRPC();
 
     const gateQuery = useQuery(trpc.gateList.queryOptions());
+
+    useEffect(() => {
+        console.log("gatequery changed");
+    }, [trpc]);
 
     if (gateQuery.isFetching) {
         return <span>Loading...</span>;
