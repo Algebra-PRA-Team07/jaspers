@@ -6,3 +6,5 @@ pruned/
 global.env
 coverage/
 .pnpm-store/
+
+tsconfig.tsbuildinfo
