@@ -1,10 +1,11 @@
-import { useState } from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import { TRPCProvider } from './utils/trpc';
-import { AppRouter } from '@jaspers/backend';
+import { AppRouter } from "@jaspers/backend";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { useState } from "react";
 import { RouterProvider } from "react-router";
-import { MainRoutes } from './routes/routes';
+
+import { MainRoutes } from "./routes/routes";
+import { TRPCProvider } from "./utils/trpc";
 
 let queryClient: QueryClient | undefined = undefined;
 
@@ -12,8 +13,9 @@ const getQueryClient = () => {
     if (!queryClient) {
         queryClient = new QueryClient();
     }
+
     return queryClient;
-}
+};
 
 function App() {
   const queryClient = getQueryClient();
@@ -21,7 +23,7 @@ function App() {
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          url: 'http://localhost:3000',
+          url: "http://localhost:3000",
         }),
       ],
     }),
@@ -33,7 +35,7 @@ function App() {
         <RouterProvider router={MainRoutes} />
       </TRPCProvider>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;

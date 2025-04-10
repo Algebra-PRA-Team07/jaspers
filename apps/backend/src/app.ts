@@ -1,8 +1,9 @@
 import { Gate } from "@jaspers/models";
-import { publicProcedure, router } from "./trpc";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
-import { Globals } from "./globals";
 import cors from "cors";
+
+import { Globals } from "./globals";
+import { publicProcedure, router } from "./trpc";
 
 // example function that simulates getting some data from the database
 const getSomeGates = async (): Promise<Gate[]> => {

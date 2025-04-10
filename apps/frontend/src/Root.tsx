@@ -12,15 +12,15 @@ const NAVBAR_LINKS: NavbarLinkType[] = [{
 }, {
     name: "Gates (backend example)",
     route: "gates"
-}]
+}];
 
-const NavbarLink: FC<{ link: NavbarLinkType }> = ({link}) => {
+const NavbarLink: FC<{ link: NavbarLinkType }> = ({ link }) => {
     return (
         <Link to={link.route} className="px-2 py-1 bg-slate-800 hover:bg-slate-700 transition-colors">
             {link.name}
         </Link>
-    )
-}
+    );
+};
 
 export const Root: FC = () => {
     return (
@@ -32,5 +32,5 @@ export const Root: FC = () => {
                 <Outlet />
             </div>
         </div>
-    )
-}
+    );
+};

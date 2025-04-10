@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 
 export const Something: FC = () => {
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0);
     
     return (
         <div className='w-full h-screen flex items-center justify-center text-center bg-slate-900'>
@@ -14,5 +14,5 @@ export const Something: FC = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};

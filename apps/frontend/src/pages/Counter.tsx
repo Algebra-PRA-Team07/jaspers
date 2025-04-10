@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 
 export const Counter: FC = () => {
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0);
     
     return (
         
@@ -13,5 +13,5 @@ export const Counter: FC = () => {
                 </button>
                 </div>
             </div>
-    )
-}
+    );
+};

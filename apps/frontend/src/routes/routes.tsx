@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate, RouteObject } from "react-router";
+
 import { Counter } from "../pages/Counter";
 import { Gates } from "../pages/Gates";
 import { Root } from "../Root";

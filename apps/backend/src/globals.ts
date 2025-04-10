@@ -3,5 +3,5 @@ type GlobalsType = {
 };
 
 export const Globals: GlobalsType = {
-    port: parseInt(process.env.PORT ?? "3000"),
+    port: Number.parseInt(process.env.PORT ?? "3000"),
 };
