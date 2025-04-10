@@ -1,0 +1,23 @@
+{
+  "name": "@jaspers/backend",
+  "version": "1.0.0",
+  "main": "src/app.ts",
+  "scripts": {
+    "start": "ts-node src/app.ts",
+    "dev": "nodemon -e ts --exec ts-node --swc src/app.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@jaspers/models": "workspace:^",
+    "@trpc/server": "^11.0.4",
+    "cors": "^2.8.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.11.18",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^22.14.0",
+    "nodemon": "^3.1.9"
+  }
+}

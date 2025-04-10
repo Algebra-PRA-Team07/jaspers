@@ -1,0 +1,10 @@
+.idea/
+node_modules/
+.env
+pruned/
+.fleet/
+global.env
+coverage/
+.pnpm-store/
+
+tsconfig.tsbuildinfo
