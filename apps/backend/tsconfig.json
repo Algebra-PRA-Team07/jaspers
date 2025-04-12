@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "lib": ["ESNext"],
-    "target": "ES2024",
+    "target": "ES2022",
     "downlevelIteration": true,
     "moduleResolution": "node",
     "strict": true
