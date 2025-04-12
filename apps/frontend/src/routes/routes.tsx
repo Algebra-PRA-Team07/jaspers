@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate, RouteObject } from "react-router";
 
 import { Counter } from "../pages/Counter";
 import { Gates } from "../pages/Gates";
+import { UsersTest } from "../pages/UsersTest.tsx";
 import { Root } from "../Root";
 
 export const MainRoutes = createBrowserRouter([
@@ -16,6 +17,10 @@ export const MainRoutes = createBrowserRouter([
             {
                 path: "gates",
                 element: <Gates />,
+            },
+            {
+                path: "users",
+                element: <UsersTest />,
             },
             {
                 index: true,
