@@ -1,7 +1,9 @@
-import { Gate } from "@jaspers/models";
+import { Gate, User } from "@jaspers/models";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 
+import { database } from "./db/database";
+import { users } from "./db/schema";
 import { Globals } from "./globals";
 import { publicProcedure, router } from "./trpc";
 
@@ -41,6 +43,10 @@ const appRouter = router({
         const gates = await getSomeGates();
 
         return gates;
+    }),
+
+    userList: publicProcedure.query(async () => {
+        return database.select().from(users) as Promise<User[]>;
     }),
 });
 
