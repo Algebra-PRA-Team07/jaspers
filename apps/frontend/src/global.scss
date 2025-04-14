@@ -3,5 +3,10 @@
 @tailwind utilities;
 
 * {
-    @apply text-white;
+    //@apply text-white;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
 }
