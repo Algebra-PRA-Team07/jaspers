@@ -4,21 +4,21 @@ import { useEditorState } from "../editorState.ts";
 import { GateNode } from "../nodes/GateNode.tsx";
 import { Select } from "./Controls.tsx";
 
-export const GateProperties: FC<{ gate: GateNode }> = ({ gate }) => {
+export const GateProperties: FC<{ node: GateNode }> = ({ node }) => {
     const { updateNodeData } = useEditorState();
 
     const onTypeChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
         (event) => {
-            updateNodeData(gate.id, { gateType: event.target.value });
+            updateNodeData(node.id, { gateType: event.target.value });
         },
-        [gate, updateNodeData],
+        [node, updateNodeData],
     );
 
     const onNegatedChange: ChangeEventHandler<HTMLInputElement> = useCallback(
         (event) => {
-            updateNodeData(gate.id, { negated: event.target.checked });
+            updateNodeData(node.id, { negated: event.target.checked });
         },
-        [gate, updateNodeData],
+        [node, updateNodeData],
     );
 
     return (
@@ -29,10 +29,10 @@ export const GateProperties: FC<{ gate: GateNode }> = ({ gate }) => {
                         {type}
                     </option>
                 ))}
-            </select>
+            </Select>
             <div>
                 <label className="mr-2">Negated</label>
-                <input type="checkbox" checked={gate.data.negated} onChange={onNegatedChange} />
+                <input type="checkbox" checked={node.data.negated} onChange={onNegatedChange} />
             </div>
         </>
     );
