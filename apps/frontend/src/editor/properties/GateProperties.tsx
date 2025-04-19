@@ -2,6 +2,7 @@ import { ChangeEventHandler, FC, useCallback } from "react";
 
 import { useEditorState } from "../editorState.ts";
 import { GateNode } from "../nodes/GateNode.tsx";
+import { Select } from "./Controls.tsx";
 
 export const GateProperties: FC<{ gate: GateNode }> = ({ gate }) => {
     const { updateNodeData } = useEditorState();
@@ -22,11 +23,7 @@ export const GateProperties: FC<{ gate: GateNode }> = ({ gate }) => {
 
     return (
         <>
-            <select
-                className="bg-zinc-800 text-white p-2"
-                value={gate.data.gateType}
-                onChange={onTypeChange}
-            >
+            <Select value={node.data.gateType} onChange={onTypeChange}>
                 {["AND", "OR", "XOR"].map((type) => (
                     <option key={type} value={type}>
                         {type}

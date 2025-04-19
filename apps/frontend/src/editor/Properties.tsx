@@ -1,19 +1,9 @@
-import { ButtonHTMLAttributes, FC, useMemo } from "react";
 
 import { useEditorState } from "./editorState.ts";
 import { GateNode } from "./nodes/GateNode.tsx";
+import { Button } from "./properties/Controls.tsx";
 import { GateProperties } from "./properties/GateProperties.tsx";
 
-const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
-    children,
-    className,
-    ...properties
-}) => {
-    return (
-        <button className={`bg-zinc-800 p-2 rounded ${className}`} {...properties}>
-            {children}
-        </button>
-    );
 };
 
 export const Properties: FC = () => {
