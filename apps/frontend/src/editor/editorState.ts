@@ -8,10 +8,8 @@ import {
     OnNodesChange,
     OnSelectionChangeFunc,
 } from "@xyflow/react";
-import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
-import { GateNode } from "./nodes/GateNode.tsx";
 import { LogicNode, LogicNodeData } from "./types.ts";
 
 interface EditorState {
@@ -24,7 +22,7 @@ interface EditorState {
     onConnect: OnConnect;
     onSelectionChange: OnSelectionChangeFunc<LogicNode>;
 
-    addNode: () => void;
+    addNode: (node: LogicNode) => void;
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 }
 
@@ -57,17 +55,9 @@ export const useEditorState = create<EditorState>((set, get) => ({
         });
     },
 
-    addNode: () => {
+    addNode: (node: LogicNode) => {
         set({
-            nodes: get().nodes.concat({
-                id: nanoid(),
-                position: { x: 50, y: 50 },
-                type: "gate",
-                data: {
-                    gateType: "AND",
-                    negated: false,
-                },
-            } satisfies GateNode),
+            nodes: get().nodes.concat(node),
         });
     },
 
