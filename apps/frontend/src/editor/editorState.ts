@@ -64,10 +64,28 @@ export const useEditorState = create<EditorState>((set, get) => ({
                 position: { x: 50, y: 50 },
                 type: "gate",
                 data: {
-                    gateType: "XOR",
-                    negated: true,
+                    gateType: "AND",
+                    negated: false,
                 },
             } satisfies GateNode),
+        });
+    },
+
+    updateNodeData: (nodeId: string, data: Record<string, unknown>) => {
+        // When new nodes are created, selectedNodes would contain stale objects
+        // That's why selectedNodes are updated
+        // This should be fixed by using better React Flow APIs
+        const nodes = get().nodes.map((node) => {
+            if (node.id === nodeId) {
+                return { ...node, data: { ...node.data, ...data } };
+            }
+
+            return node;
+        });
+
+        set({
+            nodes,
+            selectedNodes: nodes.filter((node) => node.selected),
         });
     },
 }));
