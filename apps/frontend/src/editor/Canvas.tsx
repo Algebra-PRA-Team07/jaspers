@@ -27,14 +27,8 @@ export const Canvas: FC = () => {
                 colorMode={"dark"}
             >
                 <Background />
-                <Controls />
+                <Controls position="bottom-right" />
             </ReactFlow>
-            <button
-                className="absolute top-3 left-3 z-10 py-2 px-5 bg-zinc-800 border border-zinc-700 rounded"
-                onClick={addNode}
-            >
-                Add Node
-            </button>
         </div>
     );
 };
