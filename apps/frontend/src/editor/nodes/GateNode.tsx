@@ -1,16 +1,17 @@
-import { Handle, Node, NodeProps, Position } from "@xyflow/react";
+import { Handle, NodeProps, Position } from "@xyflow/react";
 import { useMemo } from "react";
 
+import { LogicNode, LogicNodeData } from "../types.ts";
 import { BaseNode } from "./BaseNode.tsx";
 
 type GateType = "AND" | "OR" | "XOR";
 
-type GateNodeData = {
+interface GateNodeData extends LogicNodeData {
     gateType: GateType;
     negated: boolean;
-};
+}
 
-export type GateNode = Node<GateNodeData, "gate">;
+export type GateNode = LogicNode<GateNodeData, "gate">;
 
 export const GateNodeComponent = ({ selected, data }: NodeProps<GateNode>) => {
     const gateName = useMemo(() => {

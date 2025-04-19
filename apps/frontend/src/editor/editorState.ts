@@ -3,7 +3,6 @@ import {
     applyEdgeChanges,
     applyNodeChanges,
     Edge,
-    Node,
     OnConnect,
     OnEdgesChange,
     OnNodesChange,
@@ -13,19 +12,20 @@ import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
 import { GateNode } from "./nodes/GateNode.tsx";
+import { LogicNode, LogicNodeData } from "./types.ts";
 
 interface EditorState {
-    nodes: Node[];
+    nodes: LogicNode[];
     edges: Edge[];
-    selectedNodes: Node[];
+    selectedNodes: LogicNode[];
 
-    onNodesChange: OnNodesChange;
+    onNodesChange: OnNodesChange<LogicNode>;
     onEdgesChange: OnEdgesChange;
     onConnect: OnConnect;
-    onSelectionChange: OnSelectionChangeFunc;
+    onSelectionChange: OnSelectionChangeFunc<LogicNode>;
 
     addNode: () => void;
-    updateNodeData: (nodeId: string, data: Record<string, unknown>) => void;
+    updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 }
 
 export const useEditorState = create<EditorState>((set, get) => ({
@@ -71,7 +71,7 @@ export const useEditorState = create<EditorState>((set, get) => ({
         });
     },
 
-    updateNodeData: (nodeId: string, data: Record<string, unknown>) => {
+    updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => {
         // When new nodes are created, selectedNodes would contain stale objects
         // That's why selectedNodes are updated
         // This should be fixed by using better React Flow APIs
