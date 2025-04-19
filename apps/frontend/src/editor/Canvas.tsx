@@ -11,7 +11,8 @@ const nodeTypes: NodeTypes = {
 };
 
 export const Canvas: FC = () => {
-    const { nodes, edges, onEdgesChange, onNodesChange, onConnect, addNode } = useEditorState();
+    const { nodes, edges, onEdgesChange, onNodesChange, onConnect, onSelectionChange } =
+        useEditorState();
 
     return (
         <div className="h-screen">
@@ -21,6 +22,7 @@ export const Canvas: FC = () => {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                onSelectionChange={onSelectionChange}
                 nodeTypes={nodeTypes}
                 panOnScroll={true}
                 panOnScrollSpeed={1}

@@ -7,6 +7,7 @@ import {
     OnConnect,
     OnEdgesChange,
     OnNodesChange,
+    OnSelectionChangeFunc,
 } from "@xyflow/react";
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
@@ -16,17 +17,21 @@ import { GateNode } from "./nodes/GateNode.tsx";
 interface EditorState {
     nodes: Node[];
     edges: Edge[];
+    selectedNodes: Node[];
 
     onNodesChange: OnNodesChange;
     onEdgesChange: OnEdgesChange;
     onConnect: OnConnect;
+    onSelectionChange: OnSelectionChangeFunc;
 
     addNode: () => void;
+    updateNodeData: (nodeId: string, data: Record<string, unknown>) => void;
 }
 
 export const useEditorState = create<EditorState>((set, get) => ({
     nodes: [],
     edges: [],
+    selectedNodes: [],
 
     onNodesChange: (changes) => {
         set({
@@ -43,6 +48,12 @@ export const useEditorState = create<EditorState>((set, get) => ({
     onConnect: (connection) => {
         set({
             edges: addEdge(connection, get().edges),
+        });
+    },
+
+    onSelectionChange: ({ nodes }) => {
+        set({
+            selectedNodes: nodes,
         });
     },
 
