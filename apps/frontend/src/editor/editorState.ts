@@ -11,6 +11,8 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
+import { GateNode } from "./nodes/GateNode.tsx";
+
 interface EditorState {
     nodes: Node[];
     edges: Edge[];
@@ -49,10 +51,12 @@ export const useEditorState = create<EditorState>((set, get) => ({
             nodes: get().nodes.concat({
                 id: nanoid(),
                 position: { x: 50, y: 50 },
+                type: "gate",
                 data: {
-                    label: "Hello, world",
+                    gateType: "XOR",
+                    negated: true,
                 },
-            }),
+            } satisfies GateNode),
         });
     },
 }));
