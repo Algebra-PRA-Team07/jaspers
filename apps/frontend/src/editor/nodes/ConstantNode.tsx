@@ -12,7 +12,7 @@ export type ConstantNode = LogicNode<ConstantNodeData, "constant">;
 export const ConstantNodeComponent = ({ data, selected }: NodeProps<ConstantNode>) => {
     return (
         <>
-            <BaseNode selected={selected} className="rounded-full font-extrabold">
+            <BaseNode selected={selected} className="!rounded-full font-extrabold">
                 {data.desiredState === "on" ? "1" : "0"}
             </BaseNode>
             <Handle type={"source"} position={Position.Right} />
