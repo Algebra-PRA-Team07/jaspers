@@ -10,6 +10,7 @@ import {
 } from "@xyflow/react";
 import { create } from "zustand/react";
 
+import { Simulator } from "./simulation/simulator.ts";
 import { LogicNode, LogicNodeData } from "./types.ts";
 
 interface EditorState {
@@ -24,6 +25,9 @@ interface EditorState {
 
     addNode: (node: LogicNode) => void;
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
+
+    simulator?: Simulator;
+    _runSimulation: () => void;
 }
 
 export const useEditorState = create<EditorState>((set, get) => ({
@@ -65,7 +69,7 @@ export const useEditorState = create<EditorState>((set, get) => ({
         // When new nodes are created, selectedNodes would contain stale objects
         // That's why selectedNodes are updated
         // This should be fixed by using better React Flow APIs
-        const nodes = get().nodes.map((node) => {
+        let nodes = get().nodes.map((node) => {
             if (node.id === nodeId) {
                 return { ...node, data: { ...node.data, ...data } };
             }
@@ -73,9 +77,26 @@ export const useEditorState = create<EditorState>((set, get) => ({
             return node;
         });
 
+        const affectedNode = nodes.find((node) => node.id === nodeId);
+
+        if (affectedNode) {
+            nodes = get().simulator?.updateSimulation(affectedNode, nodes, get().edges) ?? nodes;
+        }
+
         set({
             nodes,
             selectedNodes: nodes.filter((node) => node.selected),
+        });
+    },
+
+    _runSimulation: () => {
+        const simulator = new Simulator(get().nodes, get().edges);
+
+        const nodes = simulator.runFullSimulation();
+
+        set({
+            nodes,
+            simulator,
         });
     },
 }));

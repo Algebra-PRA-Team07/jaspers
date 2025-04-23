@@ -17,7 +17,7 @@ const properties: Record<string, AnyPropertiesComponent> = {
 };
 
 export const Properties: FC = () => {
-    const { selectedNodes, addNode } = useEditorState();
+    const { selectedNodes, addNode, _runSimulation } = useEditorState();
 
     const selection = useMemo(() => selectedNodes.at(0), [selectedNodes]);
 
@@ -56,6 +56,7 @@ export const Properties: FC = () => {
                 {NodeProperties && <NodeProperties node={selection!} />}
                 <Button onClick={onAddGate}>Add Gate</Button>
                 <Button onClick={onAddConstant}>Add Constant</Button>
+                <Button onClick={_runSimulation}>runFullSimulation</Button>
             </div>
         </div>
     );

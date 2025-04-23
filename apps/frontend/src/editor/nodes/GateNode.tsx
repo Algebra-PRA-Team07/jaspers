@@ -6,7 +6,7 @@ import { BaseNode } from "./BaseNode.tsx";
 
 type GateType = "AND" | "OR" | "XOR";
 
-interface GateNodeData extends LogicNodeData {
+export interface GateNodeData extends LogicNodeData {
     gateType: GateType;
     negated: boolean;
 }
@@ -22,7 +22,9 @@ export const GateNodeComponent = ({ selected, data }: NodeProps<GateNode>) => {
 
     return (
         <>
-            <BaseNode selected={selected}>{gateName}</BaseNode>
+            <BaseNode logicState={data.simulator?.state} selected={selected}>
+                {gateName}
+            </BaseNode>
             <Handle type="target" position={Position.Left} />
             <Handle type="source" position={Position.Right} />
         </>
