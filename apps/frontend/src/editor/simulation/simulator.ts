@@ -1,49 +1,9 @@
 import { Edge } from "@xyflow/react";
 
-import { ConstantNodeData } from "../nodes/ConstantNode.tsx";
-import { GateNodeData } from "../nodes/GateNode.tsx";
-import { LogicNode, LogicNodeData, LogicState, negate } from "../types.ts";
+import { getRegisteredNodesProperty } from "../nodes/nodes.ts";
+import { LogicNode } from "../types.ts";
 
-export class SimulatorNode {
-    state: LogicState = "unknown";
-
-    calculateNewState(_data: LogicNodeData, _inputs: LogicState[]): LogicState {
-        throw new Error("Not Implemented");
-    }
-}
-
-export class GateSimulatorNode extends SimulatorNode {
-    override calculateNewState(data: GateNodeData, inputs: LogicState[]): LogicState {
-        let state: LogicState;
-
-        switch (data.gateType) {
-            case "AND": {
-                state = inputs.every((input) => input === "on") ? "on" : "off";
-                break;
-            }
-            case "OR": {
-                state = inputs.includes("on") ? "on" : "off";
-                break;
-            }
-            default: {
-                throw new Error("Not Implemented");
-            }
-        }
-
-        return data.negated ? negate(state) : state;
-    }
-}
-
-export class ConstantSimulatorNode extends SimulatorNode {
-    override calculateNewState(data: ConstantNodeData, _inputs: LogicState[]): LogicState {
-        return data.desiredState;
-    }
-}
-
-const simulatorNodes: Record<string, typeof SimulatorNode> = {
-    gate: GateSimulatorNode,
-    constant: ConstantSimulatorNode,
-};
+const simulatorNodes = getRegisteredNodesProperty("simulation");
 
 export class Simulator {
     private nodes: LogicNode[];
@@ -78,8 +38,6 @@ export class Simulator {
 
     private runSimulation(queue: LogicNode[]) {
         let iterations = 0;
-
-        console.log(queue);
 
         // Simulator Loop
         while (queue.length > 0) {
@@ -136,7 +94,7 @@ export class Simulator {
         nodes: LogicNode[],
         edges: Edge[],
     ): LogicNode[] {
-        // recreate all
+        // recreate all (bad)
         this.nodes = nodes.map((n) => ({
             ...n,
             data: {

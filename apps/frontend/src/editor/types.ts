@@ -1,7 +1,5 @@
 import { Node } from "@xyflow/react";
 
-import { SimulatorNode } from "./simulation/simulator.ts";
-
 export interface LogicNodeData extends Record<string, unknown> {
     simulator?: SimulatorNode;
 }
@@ -14,3 +12,11 @@ export type LogicNode<
 export type LogicState = "on" | "off" | "unknown";
 
 export const negate = (s: LogicState): LogicState => (s === "off" ? "on" : "off");
+
+export class SimulatorNode {
+    state: LogicState = "unknown";
+
+    calculateNewState(_data: LogicNodeData, _inputs: LogicState[]): LogicState {
+        throw new Error("Not Implemented");
+    }
+}

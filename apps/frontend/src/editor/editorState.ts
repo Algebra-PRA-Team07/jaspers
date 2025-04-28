@@ -27,7 +27,7 @@ interface EditorState {
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 
     simulator?: Simulator;
-    _runSimulation: () => void;
+    runSimulation: () => void;
 }
 
 export const useEditorState = create<EditorState>((set, get) => ({
@@ -77,10 +77,14 @@ export const useEditorState = create<EditorState>((set, get) => ({
             return node;
         });
 
-        const affectedNode = nodes.find((node) => node.id === nodeId);
+        const simulator = get().simulator;
 
-        if (affectedNode) {
-            nodes = get().simulator?.updateSimulation(affectedNode, nodes, get().edges) ?? nodes;
+        if (simulator) {
+            const affectedNode = nodes.find((node) => node.id === nodeId);
+
+            if (affectedNode) {
+                nodes = simulator.updateSimulation(affectedNode, nodes, get().edges) ?? nodes;
+            }
         }
 
         set({
@@ -89,7 +93,7 @@ export const useEditorState = create<EditorState>((set, get) => ({
         });
     },
 
-    _runSimulation: () => {
+    runSimulation: () => {
         const simulator = new Simulator(get().nodes, get().edges);
 
         const nodes = simulator.runFullSimulation();

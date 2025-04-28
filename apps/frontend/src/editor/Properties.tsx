@@ -1,23 +1,16 @@
 import { nanoid } from "nanoid";
-import React, { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useMemo } from "react";
 
 import { useEditorState } from "./editorState.ts";
 import { ConstantNode } from "./nodes/ConstantNode.tsx";
 import { GateNode } from "./nodes/GateNode.tsx";
-import { ConstantProperties } from "./properties/ConstantProperties.tsx";
+import { getRegisteredNodesProperty } from "./nodes/nodes.ts";
 import { Button } from "./properties/Controls.tsx";
-import { GateProperties } from "./properties/GateProperties.tsx";
-import { LogicNode } from "./types.ts";
 
-type AnyPropertiesComponent = React.ComponentType<{ node: LogicNode }>;
-
-const properties: Record<string, AnyPropertiesComponent> = {
-    gate: GateProperties as AnyPropertiesComponent,
-    constant: ConstantProperties as AnyPropertiesComponent,
-};
+const properties = getRegisteredNodesProperty("properties");
 
 export const Properties: FC = () => {
-    const { selectedNodes, addNode, _runSimulation } = useEditorState();
+    const { selectedNodes, addNode, runSimulation } = useEditorState();
 
     const selection = useMemo(() => selectedNodes.at(0), [selectedNodes]);
 
@@ -56,7 +49,7 @@ export const Properties: FC = () => {
                 {NodeProperties && <NodeProperties node={selection!} />}
                 <Button onClick={onAddGate}>Add Gate</Button>
                 <Button onClick={onAddConstant}>Add Constant</Button>
-                <Button onClick={_runSimulation}>runFullSimulation</Button>
+                <Button onClick={runSimulation}>runFullSimulation</Button>
             </div>
         </div>
     );

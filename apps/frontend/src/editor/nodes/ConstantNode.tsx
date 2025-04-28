@@ -1,6 +1,6 @@
 import { Handle, NodeProps, Position } from "@xyflow/react";
 
-import { LogicNode, LogicNodeData, LogicState } from "../types.ts";
+import { LogicNode, LogicNodeData, LogicState, SimulatorNode } from "../types.ts";
 import { BaseNode } from "./BaseNode.tsx";
 
 export interface ConstantNodeData extends LogicNodeData {
@@ -8,6 +8,12 @@ export interface ConstantNodeData extends LogicNodeData {
 }
 
 export type ConstantNode = LogicNode<ConstantNodeData, "constant">;
+
+export class ConstantSimulatorNode extends SimulatorNode {
+    override calculateNewState(data: ConstantNodeData, _inputs: LogicState[]): LogicState {
+        return data.desiredState;
+    }
+}
 
 export const ConstantNodeComponent = ({ data, selected }: NodeProps<ConstantNode>) => {
     return (

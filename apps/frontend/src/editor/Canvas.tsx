@@ -4,13 +4,9 @@ import { Background, Controls, NodeTypes, ReactFlow } from "@xyflow/react";
 import { FC } from "react";
 
 import { useEditorState } from "./editorState.ts";
-import { ConstantNodeComponent } from "./nodes/ConstantNode.tsx";
-import { GateNodeComponent } from "./nodes/GateNode.tsx";
+import { getRegisteredNodesProperty } from "./nodes/nodes.ts";
 
-const nodeTypes: NodeTypes = {
-    gate: GateNodeComponent,
-    constant: ConstantNodeComponent,
-};
+const nodeTypes: NodeTypes = getRegisteredNodesProperty("component");
 
 export const Canvas: FC = () => {
     const { nodes, edges, onEdgesChange, onNodesChange, onConnect, onSelectionChange } =
