@@ -49,19 +49,22 @@ export class Simulator {
 
             const currentNode = queue.shift()!;
 
-            for (const neighbor of this.getTargetsForNode(currentNode.id)) {
-                const neighborSimNode = neighbor.data.simulator;
+            // 1. Process this node
+            const simNode = currentNode.data.simulator;
 
-                if (!neighborSimNode) throw new Error("Uh oh");
+            if (!simNode) throw new Error("Uh oh");
 
-                const inputs = this.getSourcesForNode(neighbor.id).map(
-                    (node) => node.data.simulator!.state,
-                );
+            const inputs = this.getSourcesForNode(currentNode.id).map(
+                (node) => node.data.simulator!.state,
+            );
 
-                const newState = neighborSimNode.calculateNewState(neighbor.data, inputs);
+            const newState = simNode.calculateNewState(currentNode.data, inputs);
 
-                if (newState !== neighborSimNode.state || neighborSimNode.state === "unknown") {
-                    neighborSimNode.state = newState;
+            // 2. If the state has changed, add its neighbors to be the queue for processing
+            if (newState !== simNode.state || simNode.state === "unknown") {
+                simNode.state = newState;
+
+                for (const neighbor of this.getTargetsForNode(currentNode.id)) {
                     queue.push(neighbor);
                 }
             }
@@ -75,14 +78,6 @@ export class Simulator {
         const queue: LogicNode[] = this.nodes.filter(
             (node) => !this.edges.some((edge) => edge.target === node.id),
         );
-
-        for (const node of queue) {
-            const neighborSimNode = node.data.simulator;
-
-            if (!neighborSimNode) throw new Error("Uh oh");
-
-            neighborSimNode.state = neighborSimNode.calculateNewState(node.data, []);
-        }
 
         this.runSimulation(queue);
 
@@ -102,16 +97,6 @@ export class Simulator {
             },
         }));
         this.edges = edges;
-
-        const affectedNodeSim = affectedNode.data?.simulator;
-
-        if (!affectedNodeSim) throw new Error("Uh oh");
-
-        const inputs = this.getSourcesForNode(affectedNode.id).map(
-            (node) => node.data.simulator!.state,
-        );
-
-        affectedNodeSim.state = affectedNodeSim.calculateNewState(affectedNode.data, inputs);
 
         this.runSimulation([affectedNode]);
 
