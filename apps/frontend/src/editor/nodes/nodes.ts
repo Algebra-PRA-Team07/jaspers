@@ -2,9 +2,11 @@
 import { NodeProps } from "@xyflow/react";
 import { ComponentType } from "react";
 
+import { AdderProperties } from "../properties/AdderProperties.tsx";
 import { ConstantProperties } from "../properties/ConstantProperties.tsx";
 import { GateProperties } from "../properties/GateProperties.tsx";
 import { SimulatorNode } from "../types.ts";
+import { AdderNodeComponent, AdderSimulatorNode } from "./AdderNode.tsx";
 import { ConstantNodeComponent, ConstantSimulatorNode } from "./ConstantNode.tsx";
 import { GateNodeComponent, GateSimulatorNode } from "./GateNode.tsx";
 
@@ -32,6 +34,11 @@ export const Nodes: Record<string, NodeRegistration> = {
         component: ConstantNodeComponent,
         properties: ConstantProperties,
         simulation: ConstantSimulatorNode,
+    },
+    adder: {
+        component: AdderNodeComponent,
+        properties: AdderProperties,
+        simulation: AdderSimulatorNode,
     },
 };
 
