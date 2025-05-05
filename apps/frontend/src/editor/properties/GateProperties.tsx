@@ -1,8 +1,8 @@
 import { ChangeEventHandler, FC, useCallback } from "react";
 
-import { useEditorState } from "../editorState.ts";
-import { GateNode } from "../nodes/GateNode.tsx";
-import { Select } from "./Controls.tsx";
+import { useEditorState } from "@/editor/editorState.ts";
+import { GateNode } from "@/editor/nodes/GateNode.tsx";
+import { Select } from "@/editor/properties/Controls.tsx";
 
 export const GateProperties: FC<{ node: GateNode }> = ({ node }) => {
     const { updateNodeData } = useEditorState();

@@ -2,13 +2,13 @@
 import { NodeProps } from "@xyflow/react";
 import { ComponentType } from "react";
 
-import { AdderProperties } from "../properties/AdderProperties.tsx";
-import { ConstantProperties } from "../properties/ConstantProperties.tsx";
-import { GateProperties } from "../properties/GateProperties.tsx";
-import { SimulatorNode } from "../types.ts";
-import { AdderNodeComponent, AdderSimulatorNode } from "./AdderNode.tsx";
-import { ConstantNodeComponent, ConstantSimulatorNode } from "./ConstantNode.tsx";
-import { GateNodeComponent, GateSimulatorNode } from "./GateNode.tsx";
+import { AdderNodeComponent, AdderSimulatorNode } from "@/editor/nodes/AdderNode.tsx";
+import { ConstantNodeComponent, ConstantSimulatorNode } from "@/editor/nodes/ConstantNode.tsx";
+import { GateNodeComponent, GateSimulatorNode } from "@/editor/nodes/GateNode.tsx";
+import { AdderProperties } from "@/editor/properties/AdderProperties.tsx";
+import { ConstantProperties } from "@/editor/properties/ConstantProperties.tsx";
+import { GateProperties } from "@/editor/properties/GateProperties.tsx";
+import { SimulatorNode } from "@/editor/types.ts";
 
 type AnyNodeComponent = ComponentType<
     NodeProps & {

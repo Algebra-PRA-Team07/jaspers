@@ -1,6 +1,7 @@
 import { Handle, NodeProps, Position } from "@xyflow/react";
 
-import { EdgeStates, LogicNode, LogicNodeData, LogicState, SimulatorNode } from "../types.ts";
+import { EdgeStates, LogicNode, LogicNodeData, LogicState, SimulatorNode } from "@/editor/types.ts";
+
 import { BaseNode } from "./BaseNode.tsx";
 
 export interface ConstantNodeData extends LogicNodeData {

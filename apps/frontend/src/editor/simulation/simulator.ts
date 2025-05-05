@@ -1,7 +1,7 @@
 import { Edge } from "@xyflow/react";
 
-import { getRegisteredNodesProperty } from "../nodes/nodes.ts";
-import { EdgeStates, LogicNode, LogicState } from "../types.ts";
+import { getRegisteredNodesProperty } from "@/editor/nodes/nodes.ts";
+import { EdgeStates, LogicNode, LogicState } from "@/editor/types.ts";
 
 const simulatorNodes = getRegisteredNodesProperty("simulation");
 

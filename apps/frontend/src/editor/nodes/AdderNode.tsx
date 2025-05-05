@@ -6,7 +6,8 @@ import {
     LogicNodeData,
     logicStateFromBool,
     SimulatorNode,
-} from "../types.ts";
+} from "@/editor/types.ts";
+
 import { BaseNode } from "./BaseNode.tsx";
 
 export type AdderNodeData = LogicNodeData;

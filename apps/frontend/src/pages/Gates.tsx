@@ -2,7 +2,7 @@ import { Gate } from "@jaspers/models";
 import { useQuery } from "@tanstack/react-query";
 import { FC, useEffect } from "react";
 
-import { useTRPC } from "../utils/trpc";
+import { useTRPC } from "@/utils/trpc";
 
 const GateBlock: FC<{ gate: Gate }> = ({ gate }) => {
     return (

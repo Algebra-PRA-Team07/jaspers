@@ -1,6 +1,7 @@
 import { Handle, NodeProps, Position } from "@xyflow/react";
 import { useMemo } from "react";
 
+import { BaseNode } from "@/editor/nodes/BaseNode.tsx";
 import {
     EdgeStates,
     LogicNode,
@@ -9,8 +10,7 @@ import {
     logicStateFromBool,
     negate,
     SimulatorNode,
-} from "../types.ts";
-import { BaseNode } from "./BaseNode.tsx";
+} from "@/editor/types.ts";
 
 type GateType = "AND" | "OR" | "XOR" | "NOT";
 

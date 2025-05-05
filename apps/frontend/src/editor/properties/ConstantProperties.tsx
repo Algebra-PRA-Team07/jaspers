@@ -1,8 +1,8 @@
 import { ChangeEventHandler, FC, useCallback } from "react";
 
-import { useEditorState } from "../editorState.ts";
-import { ConstantNode } from "../nodes/ConstantNode.tsx";
-import { Select } from "./Controls.tsx";
+import { useEditorState } from "@/editor/editorState.ts";
+import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
+import { Select } from "@/editor/properties/Controls.tsx";
 
 export const ConstantProperties: FC<{ node: ConstantNode }> = ({ node }) => {
     const { updateNodeData } = useEditorState();

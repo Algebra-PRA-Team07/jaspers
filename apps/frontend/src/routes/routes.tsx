@@ -1,10 +1,10 @@
 import { createBrowserRouter, Navigate, RouteObject } from "react-router";
 
-import { Counter } from "../pages/Counter";
-import { Editor } from "../pages/Editor.tsx";
-import { Gates } from "../pages/Gates";
-import { UsersTest } from "../pages/UsersTest.tsx";
-import { Root } from "../Root";
+import { Counter } from "@/pages/Counter";
+import { Editor } from "@/pages/Editor.tsx";
+import { Gates } from "@/pages/Gates";
+import { UsersTest } from "@/pages/UsersTest.tsx";
+import { Root } from "@/Root";
 
 export const MainRoutes = createBrowserRouter([
     {

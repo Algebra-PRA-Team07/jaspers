@@ -1,6 +1,6 @@
 import { forwardRef, HTMLAttributes } from "react";
 
-import { LogicState } from "../types.ts";
+import { LogicState } from "@/editor/types.ts";
 
 export const BaseNode = forwardRef<
     HTMLDivElement,
