@@ -1,7 +1,7 @@
 import { Edge } from "@xyflow/react";
 
 import { getRegisteredNodesProperty } from "../nodes/nodes.ts";
-import { LogicNode } from "../types.ts";
+import { EdgeStates, LogicNode, LogicState } from "../types.ts";
 
 const simulatorNodes = getRegisteredNodesProperty("simulation");
 
@@ -24,18 +24,6 @@ export class Simulator {
         return this.nodes.find((n) => n.id === id);
     }
 
-    private getSourcesForNode(id: string): LogicNode[] {
-        return this.edges
-            .filter((edge) => edge.target === id)
-            .map((edge) => this.getNodeWithId(edge.source)!);
-    }
-
-    private getTargetsForNode(id: string): LogicNode[] {
-        return this.edges
-            .filter((edge) => edge.source === id)
-            .map((edge) => this.getNodeWithId(edge.target)!);
-    }
-
     private runSimulation(queue: LogicNode[]) {
         let iterations = 0;
 
@@ -54,19 +42,31 @@ export class Simulator {
 
             if (!simNode) throw new Error("Uh oh");
 
-            const inputs = this.getSourcesForNode(currentNode.id).map(
-                (node) => node.data.simulator!.state,
-            );
+            const getStateForOutputHandle = (handle: string, nodeId: string) => {
+                const node = this.getNodeWithId(nodeId);
+                const state = node!.data.simulator!.output;
 
-            const newState = simNode.calculateNewState(currentNode.data, inputs);
+                return state[handle];
+            };
+
+            const logicStates = this.edges
+                .filter((edge) => edge.target === currentNode.id)
+                .map((edge): [string, LogicState] => [
+                    edge.targetHandle!,
+                    getStateForOutputHandle(edge.sourceHandle!, edge.source),
+                ]);
+            const input: EdgeStates = Object.fromEntries(logicStates);
+
+            const changedHandles = simNode.receiveInput(currentNode.data, input);
 
             // 2. If the state has changed, add its neighbors to be the queue for processing
-            if (newState !== simNode.state || simNode.state === "unknown") {
-                simNode.state = newState;
+            const neighbourEdges = this.edges.filter(
+                (edge) =>
+                    edge.source === currentNode.id && changedHandles.includes(edge.sourceHandle!),
+            );
 
-                for (const neighbor of this.getTargetsForNode(currentNode.id)) {
-                    queue.push(neighbor);
-                }
+            for (const edge of neighbourEdges) {
+                queue.push(this.getNodeWithId(edge.target)!);
             }
         }
 

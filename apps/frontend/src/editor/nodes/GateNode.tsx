@@ -1,10 +1,18 @@
 import { Handle, NodeProps, Position } from "@xyflow/react";
 import { useMemo } from "react";
 
-import { LogicNode, LogicNodeData, LogicState, negate, SimulatorNode } from "../types.ts";
+import {
+    EdgeStates,
+    LogicNode,
+    LogicNodeData,
+    LogicState,
+    logicStateFromBool,
+    negate,
+    SimulatorNode,
+} from "../types.ts";
 import { BaseNode } from "./BaseNode.tsx";
 
-type GateType = "AND" | "OR" | "XOR";
+type GateType = "AND" | "OR" | "XOR" | "NOT";
 
 export interface GateNodeData extends LogicNodeData {
     gateType: GateType;
@@ -14,24 +22,32 @@ export interface GateNodeData extends LogicNodeData {
 export type GateNode = LogicNode<GateNodeData, "gate">;
 
 export class GateSimulatorNode extends SimulatorNode {
-    override calculateNewState(data: GateNodeData, inputs: LogicState[]): LogicState {
+    override calculateNewState(data: GateNodeData, inputs: EdgeStates): EdgeStates {
         let state: LogicState;
 
         switch (data.gateType) {
             case "AND": {
-                state = inputs.every((input) => input === "on") ? "on" : "off";
+                state = logicStateFromBool(inputs["a"] === "on" && inputs["b"] === "on");
                 break;
             }
             case "OR": {
-                state = inputs.includes("on") ? "on" : "off";
+                state = logicStateFromBool(inputs["a"] === "on" || inputs["b"] === "on");
                 break;
             }
-            default: {
-                throw new Error("Not Implemented");
+            case "XOR": {
+                state = logicStateFromBool(inputs["a"] !== inputs["b"]);
+                break;
+            }
+            case "NOT": {
+                return { out: negate(inputs["a"]) };
             }
         }
 
-        return data.negated ? negate(state) : state;
+        if (data.negated) {
+            state = negate(state);
+        }
+
+        return { out: state };
     }
 }
 
@@ -44,11 +60,12 @@ export const GateNodeComponent = ({ selected, data }: NodeProps<GateNode>) => {
 
     return (
         <>
-            <BaseNode logicState={data.simulator?.state} selected={selected}>
+            <BaseNode logicState={data.simulator?.output["out"]} selected={selected}>
                 {gateName}
             </BaseNode>
-            <Handle type="target" position={Position.Left} />
-            <Handle type="source" position={Position.Right} />
+            <Handle id={"a"} type="target" position={Position.Left} style={{ top: "30%" }} />
+            <Handle id={"b"} type="target" position={Position.Left} style={{ top: "70%" }} />
+            <Handle id={"out"} type="source" position={Position.Right} />
         </>
     );
 };
