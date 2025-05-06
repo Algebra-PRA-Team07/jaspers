@@ -1,26 +1,38 @@
-import { ChangeEventHandler, FC, useCallback } from "react";
+import { FC, useCallback } from "react";
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
 import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
-import { Select } from "@/editor/properties/Controls.tsx";
+import { LogicState } from "@/editor/types.ts";
 
 export const ConstantProperties: FC<{ node: ConstantNode }> = ({ node }) => {
     const { updateNodeData } = useEditorState();
 
-    const onStateChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
-        (event) => {
-            updateNodeData(node.id, { desiredState: event.target.value });
+    const onStateChange = useCallback(
+        (state: LogicState) => {
+            updateNodeData(node.id, { desiredState: state });
         },
         [updateNodeData, node],
     );
 
     return (
-        <Select value={node.data.desiredState} onChange={onStateChange}>
-            {["on", "off"].map((state) => (
-                <option key={state} value={state}>
-                    {state}
-                </option>
-            ))}
+        <Select value={node.data.desiredState} onValueChange={onStateChange}>
+            <SelectTrigger>
+                <SelectValue placeholder="Select gate type" />
+            </SelectTrigger>
+            <SelectContent>
+                {["on", "off"].map((state) => (
+                    <SelectItem key={state} value={state}>
+                        {state.toUpperCase()}
+                    </SelectItem>
+                ))}
+            </SelectContent>
         </Select>
     );
 };

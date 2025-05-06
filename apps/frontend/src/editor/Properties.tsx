@@ -1,12 +1,13 @@
 import { nanoid } from "nanoid";
 import { FC, useCallback, useMemo } from "react";
 
+import { Button } from "@/components/ui/button.tsx";
+import { AdderNode } from "@/editor/nodes/AdderNode.tsx";
+import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
+import { GateNode } from "@/editor/nodes/GateNode.tsx";
+
 import { useEditorState } from "./editorState.ts";
-import { AdderNode } from "./nodes/AdderNode.tsx";
-import { ConstantNode } from "./nodes/ConstantNode.tsx";
-import { GateNode } from "./nodes/GateNode.tsx";
 import { getRegisteredNodesProperty } from "./nodes/nodes.ts";
-import { Button } from "./properties/Controls.tsx";
 
 const properties = getRegisteredNodesProperty("properties");
 
@@ -54,14 +55,12 @@ export const Properties: FC = () => {
     }, [addNode]);
 
     return (
-        <div className="fixed bottom-0 left-0 p-4">
-            <div className="bg-zinc-900 p-3 w-[250px] rounded-lg shadow flex flex-col gap-3">
-                {NodeProperties && <NodeProperties node={selection!} />}
-                <Button onClick={onAddGate}>Add Gate</Button>
-                <Button onClick={onAddConstant}>Add Constant</Button>
-                <Button onClick={onAddTest}>Add HA</Button>
-                <Button onClick={runSimulation}>runFullSimulation</Button>
-            </div>
+        <div className="p-3 flex flex-col gap-3">
+            {NodeProperties && <NodeProperties node={selection!} />}
+            <Button onClick={onAddGate}>Add Gate</Button>
+            <Button onClick={onAddConstant}>Add Constant</Button>
+            <Button onClick={onAddTest}>Add HA</Button>
+            <Button onClick={runSimulation}>runFullSimulation</Button>
         </div>
     );
 };
