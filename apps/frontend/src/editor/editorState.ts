@@ -10,6 +10,8 @@ import {
 } from "@xyflow/react";
 import { create } from "zustand/react";
 
+import { createSelectors } from "@/lib/zustand.ts";
+
 import { Simulator } from "./simulation/simulator.ts";
 import { LogicNode, LogicNodeData } from "./types.ts";
 
@@ -30,7 +32,7 @@ interface EditorState {
     runSimulation: () => void;
 }
 
-export const useEditorState = create<EditorState>((set, get) => ({
+const useEditorStateBase = create<EditorState>((set, get) => ({
     nodes: [],
     edges: [],
     selectedNodes: [],
@@ -104,3 +106,5 @@ export const useEditorState = create<EditorState>((set, get) => ({
         });
     },
 }));
+
+export const useEditorState = createSelectors(useEditorStateBase);

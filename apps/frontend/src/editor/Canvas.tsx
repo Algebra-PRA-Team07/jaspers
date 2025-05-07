@@ -9,8 +9,12 @@ import { getRegisteredNodesProperty } from "./nodes/nodes.ts";
 const nodeTypes: NodeTypes = getRegisteredNodesProperty("component");
 
 export const Canvas: FC = () => {
-    const { nodes, edges, onEdgesChange, onNodesChange, onConnect, onSelectionChange } =
-        useEditorState();
+    const nodes = useEditorState.use.nodes();
+    const edges = useEditorState.use.edges();
+    const onEdgesChange = useEditorState.use.onEdgesChange();
+    const onNodesChange = useEditorState.use.onNodesChange();
+    const onConnect = useEditorState.use.onConnect();
+    const onSelectionChange = useEditorState.use.onSelectionChange();
 
     return (
         <div className="h-screen">

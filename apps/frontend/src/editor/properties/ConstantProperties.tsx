@@ -12,7 +12,7 @@ import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
 import { LogicState } from "@/editor/types.ts";
 
 export const ConstantProperties: FC<{ node: ConstantNode }> = ({ node }) => {
-    const { updateNodeData } = useEditorState();
+    const updateNodeData = useEditorState.use.updateNodeData();
 
     const onStateChange = useCallback(
         (state: LogicState) => {

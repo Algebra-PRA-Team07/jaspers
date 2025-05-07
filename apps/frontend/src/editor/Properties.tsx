@@ -12,7 +12,9 @@ import { getRegisteredNodesProperty } from "./nodes/nodes.ts";
 const properties = getRegisteredNodesProperty("properties");
 
 export const Properties: FC = () => {
-    const { selectedNodes, addNode, runSimulation } = useEditorState();
+    const selectedNodes = useEditorState((s) => s.selectedNodes);
+    const addNode = useEditorState((s) => s.addNode);
+    const runSimulation = useEditorState((s) => s.runSimulation);
 
     const selection = useMemo(() => selectedNodes.at(0), [selectedNodes]);
 

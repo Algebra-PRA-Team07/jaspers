@@ -12,7 +12,7 @@ import { useEditorState } from "@/editor/editorState.ts";
 import { GateNode } from "@/editor/nodes/GateNode.tsx";
 
 export const GateProperties: FC<{ node: GateNode }> = ({ node }) => {
-    const { updateNodeData } = useEditorState();
+    const updateNodeData = useEditorState((s) => s.updateNodeData);
 
     const onTypeChange = useCallback(
         (type: string) => {
@@ -23,7 +23,7 @@ export const GateProperties: FC<{ node: GateNode }> = ({ node }) => {
 
     const onNegatedClick = useCallback(() => {
         updateNodeData(node.id, { negated: !node.data.negated });
-    }, [node, updateNodeData, node.data.negated]);
+    }, [node, updateNodeData]);
 
     return (
         <>
