@@ -18,6 +18,7 @@
     "@trpc/tanstack-react-query": "^11.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.2",
     "react-router": "^7.5.0",
     "sass": "^1.86.3"
   },

@@ -24,6 +24,15 @@ function App() {
             links: [
                 httpBatchLink({
                     url: "http://localhost:3000",
+                    headers: () => {
+                        const jwt = localStorage.getItem("authToken");
+
+                        if (!jwt) return {};
+
+                        return {
+                            Authorization: `Bearer ${jwt}`,
+                        };
+                    },
                 }),
             ],
         }),
