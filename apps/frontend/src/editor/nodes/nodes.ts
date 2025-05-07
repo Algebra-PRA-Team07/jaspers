@@ -16,6 +16,7 @@ type AnyNodeComponent = ComponentType<
         type: any;
     }
 >;
+
 type AnyPropertiesComponent = ComponentType<{ node: any }>;
 
 export interface NodeRegistration {
