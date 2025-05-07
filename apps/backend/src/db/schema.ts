@@ -1,7 +1,10 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
-    id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    oidc_access_token: varchar(),
-    oidc_refresh_token: varchar(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
+    oidc_id_token: varchar(),
+    id_token_exp: timestamp(),
+    email: varchar().unique(),
+    picture_url: varchar(),
+    name: varchar(),
 });

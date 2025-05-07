@@ -10,6 +10,7 @@ type GlobalsType = {
         redirectUri: string;
         scopes: string[];
     };
+    jwtSecret: string;
 };
 
 const requireEnvironment = (key: string): string => {
@@ -44,4 +45,5 @@ export const Globals: GlobalsType = {
         redirectUri: requireEnvironment("OIDC_REDIRECT_URI"),
         scopes: requireEnvironment("OIDC_SCOPES").split(","),
     },
+    jwtSecret: requireEnvironment("JWT_SECRET"),
 };

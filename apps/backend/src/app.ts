@@ -1,5 +1,4 @@
 import { Gate, User } from "@jaspers/models";
-import { TRPCError } from "@trpc/server";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 
@@ -7,7 +6,8 @@ import { database } from "./db/database";
 import { users } from "./db/schema";
 import { Globals } from "./globals";
 import { Logger } from "./logging";
-import { initOidc, oidcExchangeAuthorizationToken, oidcMakeAuthorizationUrl } from "./oidc";
+import { initOidc } from "./oidc";
+import { authRouter } from "./routers/auth/authRouter";
 import { createContext, publicProcedure, router } from "./trpc";
 
 // example function that simulates getting some data from the database
@@ -50,23 +50,7 @@ const appRouter = router({
         return database.select().from(users);
     }),
 
-    auth: router({
-        oidc: router({
-            loginUrl: publicProcedure.query(() => {
-                return oidcMakeAuthorizationUrl();
-            }),
-            callback: publicProcedure.query(async ({ ctx }) => {
-                const code = ctx.query.get("code");
-
-                if (!code)
-                    throw new TRPCError({
-                        code: "BAD_REQUEST",
-                    });
-
-                return await oidcExchangeAuthorizationToken(code);
-            }),
-        }),
-    }),
+    auth: authRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -27,7 +27,7 @@ export const initOidc = async () => {
 export const OidcIdTokenSchema = z.object({
     email: z.string(),
     name: z.string(),
-    picture: z.string(),
+    picture: z.string().optional(),
 });
 
 export type OidcTokenData = z.infer<typeof OidcIdTokenSchema>;
@@ -39,7 +39,8 @@ type ExchangeResponse =
     | {
           success: true;
           data: OidcTokenData;
-          id_token: string;
+          idToken: string;
+          idTokenData: JwtPayload;
       };
 
 const validateJwksIdToken = async (token: string): Promise<JwtPayload | null> =>
@@ -98,7 +99,7 @@ export const oidcExchangeAuthorizationToken = async (code: string): Promise<Exch
 
     if (!payloadValid.success) return { success: false };
 
-    return { success: true, data: payloadValid.data, id_token };
+    return { success: true, data: payloadValid.data, idToken: id_token, idTokenData: valid };
 };
 
 export const oidcMakeAuthorizationUrl = () => {
