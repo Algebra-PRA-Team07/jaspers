@@ -24,7 +24,7 @@ export const MainRoutes = createBrowserRouter([
                 element: <UsersTest />,
             },
             {
-                path: "login",
+                path: "auth/login",
                 element: <Login />,
             },
             {

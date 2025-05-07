@@ -13,7 +13,13 @@ export const LoggedIn: FC = () => {
 
     const logout = useCallback(() => {
         localStorage.removeItem("authToken");
-        navigate("/login");
+        navigate("/auth/login");
+    }, [navigate]);
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+
+        if (!token) navigate("/auth/login");
     }, [navigate]);
 
     if (!userData.isSuccess) return <span>Loading...</span>;
@@ -69,7 +75,7 @@ export const LoginCallback: FC = () => {
         loginCallback.mutate({ code });
     }, [loginCallback, search]);
 
-    if (!search.has("code")) return <Navigate to={"/login"} />;
+    if (!search.has("code")) return <Navigate to={"/auth/login"} />;
 
     if (loginCallback.isIdle || loginCallback.isPending) return <span>Logging in...</span>;
 
@@ -82,6 +88,14 @@ export const Login: FC = () => {
     const trpc = useTRPC();
 
     const loginUrl = useQuery(trpc.auth.oidc.loginUrl.queryOptions());
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+
+        if (token) navigate("/auth/data");
+    }, [navigate]);
 
     if (!loginUrl.isSuccess) return <>Loading...</>;
 
