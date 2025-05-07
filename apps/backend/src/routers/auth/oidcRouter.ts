@@ -2,25 +2,26 @@ import assert from "node:assert";
 
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 import { database } from "../../db/database";
 import { users } from "../../db/schema";
-import { oidcExchangeAuthorizationToken, oidcMakeAuthorizationUrl } from "../../oidc";
+import { generateGravatarUrl, generateJwt } from "../../lib/auth";
+import { oidcExchangeAuthorizationToken, oidcMakeAuthorizationUrl } from "../../lib/oidc";
 import { publicProcedure, router } from "../../trpc";
-import { generateGravatarUrl, generateJwt } from "../../util/auth";
 
 export const oidcRouter = router({
     loginUrl: publicProcedure.query(() => {
         return oidcMakeAuthorizationUrl();
     }),
-    callback: publicProcedure
-        // .input(
-        //     z.object({
-        //         code: z.string(),
-        //     }),
-        // )
-        .query(async ({ input, ctx }) => {
-            const exchanged = await oidcExchangeAuthorizationToken(ctx.query.get("code")!);
+    login: publicProcedure
+        .input(
+            z.object({
+                code: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const exchanged = await oidcExchangeAuthorizationToken(input.code);
 
             if (!exchanged.success || !exchanged.idTokenData.exp)
                 throw new TRPCError({
@@ -37,7 +38,6 @@ export const oidcRouter = router({
             };
 
             // doing an upsert burns sequence ids
-
             const existing = await database.query.users.findFirst({
                 columns: { id: true },
                 where: eq(users.email, email),
@@ -63,11 +63,11 @@ export const oidcRouter = router({
 
             const jwt = generateJwt(databaseUser[0].id, exchanged.data);
 
-            const databaseUsers = await database.query.users.findMany();
+            // const databaseUsers = await database.query.users.findMany();
 
             return {
                 jwt,
-                users: databaseUsers,
+                // users: databaseUsers,
             };
         }),
 });

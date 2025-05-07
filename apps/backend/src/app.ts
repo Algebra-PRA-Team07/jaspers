@@ -1,14 +1,15 @@
-import { Gate, User } from "@jaspers/models";
+import { Gate } from "@jaspers/models";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 
+import { createContext } from "./context";
 import { database } from "./db/database";
 import { users } from "./db/schema";
 import { Globals } from "./globals";
+import { initOidc } from "./lib/oidc";
 import { Logger } from "./logging";
-import { initOidc } from "./oidc";
 import { authRouter } from "./routers/auth/authRouter";
-import { createContext, publicProcedure, router } from "./trpc";
+import { publicProcedure, router } from "./trpc";
 
 // example function that simulates getting some data from the database
 const getSomeGates = async (): Promise<Gate[]> => {
@@ -46,7 +47,7 @@ const appRouter = router({
         return await getSomeGates();
     }),
 
-    userList: publicProcedure.query<User[]>(async () => {
+    userList: publicProcedure.query(async () => {
         return database.select().from(users);
     }),
 
