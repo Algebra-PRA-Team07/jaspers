@@ -26,6 +26,7 @@
     "nanoid": "^5.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.2",
     "react-resizable-panels": "^3.0.1",
     "react-router": "^7.5.0",
     "sass": "^1.86.3",

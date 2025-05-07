@@ -8,7 +8,7 @@ const UserBlock: FC<{ user: User }> = ({ user }) => {
     return (
         <div className="p-2 bg-slate-800 rounded flex items-center justify-between text-lg">
             <span className="text-base text-neutral-400">
-                id: {user.id} username: {user.username}
+                id: {user.id} username: {user.name}
             </span>
         </div>
     );

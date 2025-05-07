@@ -21,6 +21,10 @@ const NAVBAR_LINKS: NavbarLinkType[] = [
         name: "Users (database example)",
         route: "users",
     },
+    {
+        name: "Login example",
+        route: "auth/login",
+    },
 ];
 
 const NavbarLink: FC<{ link: NavbarLinkType }> = ({ link }) => {
