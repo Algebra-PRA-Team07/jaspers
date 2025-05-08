@@ -2,7 +2,7 @@ import { User } from "@jaspers/models";
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 
-import { useTRPC } from "../utils/trpc.ts";
+import { useTRPC } from "@/utils/trpc.ts";
 
 const UserBlock: FC<{ user: User }> = ({ user }) => {
     return (

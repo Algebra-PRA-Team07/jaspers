@@ -1,5 +1,7 @@
 import { FC, useState } from "react";
 
+import { Button } from "@/components/ui/button.tsx";
+
 export const Counter: FC = () => {
     const [count, setCount] = useState(0);
 
@@ -7,12 +9,7 @@ export const Counter: FC = () => {
         <div className="flex flex-col items-center justify-center text-center gap-2">
             <h1>Jaspers</h1>
             <div>
-                <button
-                    className="px-2 py-1 rounded bg-neutral-200 text-black hover:bg-neutral-300 transition-colors"
-                    onClick={() => setCount((count) => count + 1)}
-                >
-                    Count is {count}
-                </button>
+                <Button onClick={() => setCount((count) => count + 1)}>Count is {count}</Button>
             </div>
         </div>
     );
