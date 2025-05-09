@@ -2,12 +2,12 @@ import { Gate } from "@jaspers/models";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 
-import { database } from "./db/database";
 import { Globals } from "./globals";
 import { Logger } from "./logging";
 import { users } from "./db/schema";
 import { createContext } from "./context";
 import { authRouter } from "./routers/auth/authRouter";
+import { database } from "./db/database";
 import { initOidc } from "./lib/oidc";
 import { publicProcedure, router } from "./trpc";
 
