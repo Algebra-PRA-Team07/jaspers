@@ -2,13 +2,13 @@ import { Gate } from "@jaspers/models";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 
-import { createContext } from "./context";
 import { database } from "./db/database";
-import { users } from "./db/schema";
 import { Globals } from "./globals";
-import { initOidc } from "./lib/oidc";
 import { Logger } from "./logging";
+import { users } from "./db/schema";
+import { createContext } from "./context";
 import { authRouter } from "./routers/auth/authRouter";
+import { initOidc } from "./lib/oidc";
 import { publicProcedure, router } from "./trpc";
 
 // example function that simulates getting some data from the database
@@ -19,7 +19,7 @@ const getSomeGates = async (): Promise<Gate[]> => {
     return [
         {
             id: Math.floor(Math.random() * 10),
-            type: "and",
+            type: "and --",
             no_operands: 2,
         },
         {
