@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - "master"
-    pull_request:
     paths:
       - "**.ts"
       - "**.tsx"
       - ".github/workflows/typecheck.yml"
+  pull_request:
 
 jobs:
   deploy:
