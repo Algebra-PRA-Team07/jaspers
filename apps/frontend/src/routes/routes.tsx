@@ -7,6 +7,8 @@ import { LoggedIn, Login, LoginCallback } from "@/pages/Login.tsx";
 import { UsersTest } from "@/pages/UsersTest.tsx";
 import { Root } from "@/Root";
 
+import { LoggedIn, Login, LoginCallback } from "../pages/Login.tsx";
+
 export const MainRoutes = createBrowserRouter([
     {
         path: "/editor",

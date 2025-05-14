@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/logic-circuit.schema.json",
+  "title": "LogicCircuit",
+  "type": "object",
+  "required": ["inputs", "gates", "outputs"],
+  "properties": {
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of input signal names"
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "inputs"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the gate"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["AND", "NAND", "OR", "NOR", "XOR"],
+            "description": "Type of logic gate"
+          },
+          "inputs": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "#/$defs/Source"
+            },
+            "description": "Sources for this gate's inputs"
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "List of all gates in the circuit"
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Source"
+      },
+      "description": "List of output references"
+    }
+  },
+  "$defs": {
+    "Source": {
+      "type": "object",
+      "required": ["type"],
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "input" },
+            "name": { "type": "string" }
+          },
+          "required": ["type", "name"]
+        },
+        {
+          "properties": {
+            "type": { "const": "gate" },
+            "id": { "type": "string" }
+          },
+          "required": ["type", "id"]
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
