@@ -57,12 +57,14 @@ export const Properties: FC = () => {
     }, [addNode]);
 
     return (
-        <div className="p-3 flex flex-col gap-3">
-            {NodeProperties && <NodeProperties node={selection!} />}
-            <Button onClick={onAddGate}>Add Gate</Button>
-            <Button onClick={onAddConstant}>Add Constant</Button>
-            <Button onClick={onAddTest}>Add HA</Button>
-            <Button onClick={runSimulation}>runFullSimulation</Button>
+        <div className="fixed top-0 left-0 h-screen p-4">
+            <div className="bg-card w-[250px] h-full rounded-lg shadow flex flex-col p-3 gap-3">
+                {NodeProperties && <NodeProperties node={selection!} />}
+                <Button onClick={onAddGate}>Add Gate</Button>
+                <Button onClick={onAddConstant}>Add Constant</Button>
+                <Button onClick={onAddTest}>Add HA</Button>
+                <Button onClick={runSimulation}>runFullSimulation</Button>
+            </div>
         </div>
     );
 };
