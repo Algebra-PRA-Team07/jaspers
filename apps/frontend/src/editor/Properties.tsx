@@ -21,8 +21,8 @@ export const Properties: FC = () => {
     }, [selection]);
 
     return (
-        <div className="fixed top-0 left-0 h-screen p-4">
-            <div className="bg-card w-[250px] h-full rounded-lg shadow flex flex-col p-3 gap-3">
+        <div className="fixed top-0 left-0 h-screen p-4 pt-16">
+            <div className="w-[250px] h-full bg-card border rounded-md shadow flex flex-col p-3 gap-3">
                 {NodeProperties && <NodeProperties node={selection!} />}
                 <div className="flex-grow"></div>
                 <NewGateButton />

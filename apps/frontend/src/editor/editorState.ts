@@ -11,6 +11,7 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
+import { Nodes } from "@/editor/nodes/nodes.ts";
 import { createSelectors } from "@/lib/zustand.ts";
 
 import { Simulator } from "./simulation/simulator.ts";
