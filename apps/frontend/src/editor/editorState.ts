@@ -8,6 +8,7 @@ import {
     OnNodesChange,
     OnSelectionChangeFunc,
 } from "@xyflow/react";
+import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
 import { createSelectors } from "@/lib/zustand.ts";
@@ -25,6 +26,7 @@ interface EditorState {
     onConnect: OnConnect;
     onSelectionChange: OnSelectionChangeFunc<LogicNode>;
 
+    createNode: (nodeType: string) => void;
     addNode: (node: LogicNode) => void;
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 
@@ -58,6 +60,19 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
     onSelectionChange: ({ nodes }) => {
         set({
             selectedNodes: nodes,
+        });
+    },
+
+    createNode: (nodeType: string) => {
+        const newNode: LogicNode = {
+            id: nanoid(),
+            position: { x: 300, y: 200 },
+            type: nodeType,
+            data: Nodes[nodeType].createData(),
+        };
+
+        set({
+            nodes: get().nodes.concat(newNode),
         });
     },
 
