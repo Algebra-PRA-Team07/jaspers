@@ -11,13 +11,19 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
+import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
+import { GateNode } from "@/editor/nodes/GateNode.tsx";
 import { Nodes } from "@/editor/nodes/nodes.ts";
 import { createSelectors } from "@/lib/zustand.ts";
 
 import { Simulator } from "./simulation/simulator.ts";
 import { LogicNode, LogicNodeData } from "./types.ts";
 
+type SimulatorState = "stopped" | "paused" | "running";
+
 interface EditorState {
+    simulatorState: SimulatorState;
+
     nodes: LogicNode[];
     edges: Edge[];
     selectedNodes: LogicNode[];
@@ -32,12 +38,98 @@ interface EditorState {
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 
     simulator?: Simulator;
-    runSimulation: () => void;
+
+    restartSimulation: () => void;
+    pauseSimulation: () => void;
+    continueSimulation: () => void;
+    stopSimulation: () => void;
 }
 
 const useEditorStateBase = create<EditorState>((set, get) => ({
-    nodes: [],
-    edges: [],
+    simulatorState: "stopped",
+
+    nodes: [
+        {
+            id: "nor-1",
+            type: "gate",
+            position: { x: 450, y: 100 },
+            data: {
+                gateType: "OR",
+                negated: true,
+            },
+        } satisfies GateNode,
+
+        {
+            id: "nor-2",
+            type: "gate",
+            position: { x: 450, y: 300 },
+            data: {
+                gateType: "OR",
+                negated: true,
+            },
+        } satisfies GateNode,
+
+        {
+            id: "and-1",
+            type: "gate",
+            position: { x: 300, y: 100 },
+            data: {
+                gateType: "AND",
+                negated: false,
+            },
+        } satisfies GateNode,
+
+        {
+            id: "and-2",
+            type: "gate",
+            position: { x: 300, y: 300 },
+            data: {
+                gateType: "AND",
+                negated: false,
+            },
+        } satisfies GateNode,
+
+        {
+            id: "not-1",
+            type: "gate",
+            position: { x: 150, y: 100 },
+            data: {
+                gateType: "NOT",
+                negated: false,
+            },
+        } satisfies GateNode,
+
+        {
+            id: "enable",
+            type: "constant",
+            position: { x: 200, y: 200 },
+            data: {
+                desiredState: "off",
+            },
+        } satisfies ConstantNode,
+
+        {
+            id: "data",
+            type: "constant",
+            position: { x: 35, y: 200 },
+            data: {
+                desiredState: "off",
+            },
+        } satisfies ConstantNode,
+    ],
+    edges: [
+        { id: nanoid(), source: "nor-1", sourceHandle: "out", target: "nor-2", targetHandle: "a" },
+        { id: nanoid(), source: "nor-2", sourceHandle: "out", target: "nor-1", targetHandle: "b" },
+        { id: nanoid(), source: "and-1", sourceHandle: "out", target: "nor-1", targetHandle: "a" },
+        { id: nanoid(), source: "and-2", sourceHandle: "out", target: "nor-2", targetHandle: "b" },
+        { id: nanoid(), source: "not-1", sourceHandle: "out", target: "and-1", targetHandle: "a" },
+
+        { id: nanoid(), source: "enable", sourceHandle: "out", target: "and-1", targetHandle: "b" },
+        { id: nanoid(), source: "enable", sourceHandle: "out", target: "and-2", targetHandle: "a" },
+
+        { id: nanoid(), source: "data", sourceHandle: "out", target: "not-1", targetHandle: "a" },
+        { id: nanoid(), source: "data", sourceHandle: "out", target: "and-2", targetHandle: "b" },
+    ],
     selectedNodes: [],
 
     onNodesChange: (changes) => {
@@ -111,14 +203,33 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         });
     },
 
-    runSimulation: () => {
+    restartSimulation: () => {
         const simulator = new Simulator(get().nodes, get().edges);
 
         const nodes = simulator.runFullSimulation();
 
         set({
+            simulatorState: "running",
             nodes,
             simulator,
+        });
+    },
+
+    pauseSimulation: () => {},
+
+    continueSimulation: () => {},
+
+    stopSimulation: () => {
+        set({
+            simulatorState: "stopped",
+            simulator: undefined,
+            nodes: get().nodes.map((node) => ({
+                ...node,
+                data: {
+                    ...node.data,
+                    simulator: undefined,
+                },
+            })),
         });
     },
 }));
