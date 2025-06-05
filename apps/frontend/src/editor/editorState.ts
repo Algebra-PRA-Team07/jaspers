@@ -176,7 +176,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
     },
 
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => {
-        // When new nodes are created, selectedNodes would contain stale objects
+        // When nodes are recreated, selectedNodes would contain stale objects
         // That's why selectedNodes are updated
         // This should be fixed by using better React Flow APIs
         let nodes = get().nodes.map((node) => {
@@ -187,13 +187,15 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
             return node;
         });
 
-        const simulator = get().simulator;
+        if (get().simulatorState === "running") {
+            const simulator = get().simulator;
 
-        if (simulator) {
-            const affectedNode = nodes.find((node) => node.id === nodeId);
+            if (simulator) {
+                const affectedNode = nodes.find((node) => node.id === nodeId);
 
-            if (affectedNode) {
-                nodes = simulator.updateSimulation(affectedNode, nodes, get().edges) ?? nodes;
+                if (affectedNode) {
+                    nodes = simulator.updateSimulation(affectedNode, nodes, get().edges) ?? nodes;
+                }
             }
         }
 
@@ -215,9 +217,27 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         });
     },
 
-    pauseSimulation: () => {},
+    pauseSimulation: () => {
+        if (get().simulatorState !== "running") return;
 
-    continueSimulation: () => {},
+        set({ simulatorState: "paused" });
+    },
+
+    continueSimulation: () => {
+        if (get().simulatorState !== "paused") return;
+
+        const simulator = get().simulator;
+        let nodes = get().nodes;
+
+        if (simulator) {
+            nodes = simulator.updateSimulation(null, nodes, get().edges);
+        }
+
+        set({
+            simulatorState: "running",
+            nodes,
+        });
+    },
 
     stopSimulation: () => {
         set({

@@ -73,11 +73,13 @@ export class Simulator {
         console.log(`Simulation stable in ${iterations} iterations`);
     }
 
+    private nodesWithoutInputs(): LogicNode[] {
+        return this.nodes.filter((node) => !this.edges.some((edge) => edge.target === node.id));
+    }
+
     public runFullSimulation(): LogicNode[] {
         // Start the queue filled with nodes that don't have inputs (dependencies to other nodes)
-        const queue: LogicNode[] = this.nodes.filter(
-            (node) => !this.edges.some((edge) => edge.target === node.id),
-        );
+        const queue: LogicNode[] = this.nodesWithoutInputs();
 
         this.runSimulation(queue);
 
@@ -85,7 +87,7 @@ export class Simulator {
     }
 
     public updateSimulation(
-        affectedNode: LogicNode,
+        affectedNode: LogicNode | null,
         nodes: LogicNode[],
         edges: Edge[],
     ): LogicNode[] {
@@ -98,7 +100,13 @@ export class Simulator {
         }));
         this.edges = edges;
 
-        this.runSimulation([affectedNode]);
+        if (affectedNode === null) {
+            // If we don't know what specific node has changed, run the entire tree
+            this.runSimulation(this.nodesWithoutInputs());
+        } else {
+            // If we know what specific node has changed, start from that node instead of the entire tree
+            this.runSimulation([affectedNode]);
+        }
 
         return this.nodes;
     }
