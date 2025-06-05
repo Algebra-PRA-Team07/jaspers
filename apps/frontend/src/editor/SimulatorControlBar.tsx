@@ -1,4 +1,4 @@
-import { Pause, Play, RotateCcw, Square } from "lucide-react";
+import { Pause, Play, RotateCcw, SkipForward, Square } from "lucide-react";
 import { FC, useCallback } from "react";
 
 import { Button } from "@/components/ui/button.tsx";
@@ -40,6 +40,10 @@ export const SimulatorControlBar: FC = () => {
                 onClick={stopSimulation}
             >
                 <Square />
+            </Button>
+
+            <Button variant={"ghost"}>
+                <SkipForward />
             </Button>
 
             <Button
