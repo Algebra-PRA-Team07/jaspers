@@ -14,6 +14,9 @@ import { ConstantProperties } from "@/editor/properties/ConstantProperties.tsx";
 import { GateProperties } from "@/editor/properties/GateProperties.tsx";
 import { LogicNodeData, SimulatorNode } from "@/editor/types.ts";
 
+import { OutputProperties } from "../properties/OutputProperties";
+import { OutputNodeComponent, OutputSimulatorNode } from "./OutputNode";
+
 type AnyNodeComponent = ComponentType<
     NodeProps & {
         data: any;
@@ -53,6 +56,13 @@ export const Nodes: Record<string, NodeRegistration> = {
             ({
                 desiredState: "off",
             }) satisfies ConstantNodeData,
+    },
+    display: {
+        name: "Output",
+        component: OutputNodeComponent,
+        properties: OutputProperties,
+        simulation: OutputSimulatorNode,
+        createData: () => ({}),
     },
     adder: {
         name: "Half Adder",

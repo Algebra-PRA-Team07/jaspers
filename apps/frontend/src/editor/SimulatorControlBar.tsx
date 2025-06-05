@@ -40,7 +40,6 @@ export const SimulatorControlBar: FC = () => {
                 break;
             }
         }
-
     }, [continueSimulation, pauseSimulation, restartSimulation, simulatorState]);
 
     return (
