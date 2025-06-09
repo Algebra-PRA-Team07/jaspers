@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useEditorState } from "@/editor/editorState.ts";
 import { Nodes } from "@/editor/nodes/nodes.ts";
 
-export const NewGateButton: FC = () => {
+export const NewGateButton: FC = React.memo(() => {
     const createNode = useEditorState.use.createNode();
 
     const [open, setOpen] = useState(false);
@@ -54,4 +54,4 @@ export const NewGateButton: FC = () => {
             </PopoverContent>
         </Popover>
     );
-};
+});
