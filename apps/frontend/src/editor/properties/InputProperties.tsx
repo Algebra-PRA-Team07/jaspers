@@ -8,10 +8,10 @@ import {
     SelectValue,
 } from "@/components/ui/select.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
-import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
+import { InputNode } from "@/editor/nodes/InputNode.tsx";
 import { LogicState } from "@/editor/types.ts";
 
-export const ConstantProperties: FC<{ node: ConstantNode }> = ({ node }) => {
+export const InputProperties: FC<{ node: InputNode }> = ({ node }) => {
     const updateNodeData = useEditorState.use.updateNodeData();
 
     const onStateChange = useCallback(

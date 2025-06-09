@@ -1,23 +1,16 @@
 import { Edge } from "@xyflow/react";
 
-import { getRegisteredNodesProperty } from "@/editor/nodes/nodes.ts";
-import { EdgeStates, LogicNode, LogicState } from "@/editor/types.ts";
-
-const simulatorNodes = getRegisteredNodesProperty("simulation");
+import { NodeType, REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
+import { EdgeStates, LogicNode, LogicState, SimulatorNode } from "@/editor/types.ts";
 
 export class Simulator {
-    private nodes: LogicNode[];
-    private edges: Edge[];
+    private nodes: LogicNode[] = [];
+    private edges: Edge[] = [];
 
-    constructor(nodes: LogicNode[], edges: Edge[]) {
-        this.nodes = nodes.map((n) => ({
-            ...n,
-            data: {
-                ...n.data,
-                simulator: new simulatorNodes[n.type!](),
-            },
-        }));
-        this.edges = edges;
+    private createSimulatorNode(node: LogicNode): SimulatorNode {
+        const simulatorNodes = REGISTERED_NODES_PROPERTIES["simulation"];
+
+        return new simulatorNodes[node.type! as NodeType]();
     }
 
     private getNodeWithId(id: string): LogicNode | undefined {
@@ -73,19 +66,12 @@ export class Simulator {
         console.log(`Simulation stable in ${iterations} iterations`);
     }
 
-    public runFullSimulation(): LogicNode[] {
-        // Start the queue filled with nodes that don't have inputs (dependencies to other nodes)
-        const queue: LogicNode[] = this.nodes.filter(
-            (node) => !this.edges.some((edge) => edge.target === node.id),
-        );
-
-        this.runSimulation(queue);
-
-        return this.nodes;
+    private nodesWithoutInputs(): LogicNode[] {
+        return this.nodes.filter((node) => !this.edges.some((edge) => edge.target === node.id));
     }
 
     public updateSimulation(
-        affectedNode: LogicNode,
+        affectedNode: LogicNode | undefined | null,
         nodes: LogicNode[],
         edges: Edge[],
     ): LogicNode[] {
@@ -94,12 +80,32 @@ export class Simulator {
             ...n,
             data: {
                 ...n.data,
+                simulator: n.data.simulator ?? this.createSimulatorNode(n),
             },
         }));
         this.edges = edges;
 
-        this.runSimulation([affectedNode]);
+        if (affectedNode) {
+            // If we know what specific node has changed, start from that node instead of the entire tree
+            this.runSimulation([affectedNode]);
+        } else {
+            // If we don't know what specific node has changed, run the entire tree
+            this.runSimulation(this.nodesWithoutInputs());
+        }
 
         return this.nodes;
+    }
+
+    // This just recreates simulator nodes, effectively removing old simulation state for every node
+    public runFreshSimulation(nodes: LogicNode[], edges: Edge[]): LogicNode[] {
+        const newNodes = nodes.map((n) => ({
+            ...n,
+            data: {
+                ...n.data,
+                simulator: undefined,
+            },
+        }));
+
+        return this.updateSimulation(null, newNodes, edges);
     }
 }

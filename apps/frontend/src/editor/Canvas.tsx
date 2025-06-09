@@ -1,12 +1,13 @@
 import "@xyflow/react/dist/style.css";
 
-import { Background, Controls, NodeTypes, ReactFlow } from "@xyflow/react";
+import { Background, Controls, ReactFlow } from "@xyflow/react";
 import { FC } from "react";
 
-import { useEditorState } from "./editorState.ts";
-import { getRegisteredNodesProperty } from "./nodes/nodes.ts";
+import { REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
 
-const nodeTypes: NodeTypes = getRegisteredNodesProperty("component");
+import { useEditorState } from "./editorState.ts";
+
+const nodeTypes = REGISTERED_NODES_PROPERTIES["component"];
 
 export const Canvas: FC = () => {
     const nodes = useEditorState.use.nodes();
