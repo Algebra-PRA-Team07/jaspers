@@ -140,6 +140,14 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
 
         { id: nanoid(), source: "data", sourceHandle: "out", target: "not-1", targetHandle: "a" },
         { id: nanoid(), source: "data", sourceHandle: "out", target: "and-2", targetHandle: "b" },
+
+        {
+            id: nanoid(),
+            source: "nor-1",
+            sourceHandle: "out",
+            target: "output",
+            targetHandle: "in",
+        },
     ],
     selectedNodes: [],
 
