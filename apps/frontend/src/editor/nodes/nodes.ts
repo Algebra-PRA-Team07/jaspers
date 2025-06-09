@@ -4,14 +4,19 @@ import { ComponentType } from "react";
 
 import { AdderNodeComponent, AdderSimulatorNode } from "@/editor/nodes/AdderNode.tsx";
 import {
-    ConstantNodeComponent,
-    ConstantNodeData,
-    ConstantSimulatorNode,
-} from "@/editor/nodes/ConstantNode.tsx";
+    CustomNodeComponent,
+    CustomNodeData,
+    CustomSimulatorNode,
+} from "@/editor/nodes/CustomNode.tsx";
 import { GateNodeComponent, GateNodeData, GateSimulatorNode } from "@/editor/nodes/GateNode.tsx";
+import {
+    InputNodeComponent,
+    InputNodeData,
+    InputSimulatorNode,
+} from "@/editor/nodes/InputNode.tsx";
 import { AdderProperties } from "@/editor/properties/AdderProperties.tsx";
-import { ConstantProperties } from "@/editor/properties/ConstantProperties.tsx";
 import { GateProperties } from "@/editor/properties/GateProperties.tsx";
+import { InputProperties } from "@/editor/properties/InputProperties.tsx";
 import { LogicNodeData, SimulatorNode } from "@/editor/types.ts";
 
 import { OutputProperties } from "../properties/OutputProperties";
@@ -47,17 +52,17 @@ export const Nodes: Record<string, NodeRegistration> = {
                 negated: false,
             }) satisfies GateNodeData,
     },
-    constant: {
-        name: "Constant",
-        component: ConstantNodeComponent,
-        properties: ConstantProperties,
-        simulation: ConstantSimulatorNode,
+    _input: {
+        name: "Input",
+        component: InputNodeComponent,
+        properties: InputProperties,
+        simulation: InputSimulatorNode,
         createData: () =>
             ({
                 desiredState: "off",
-            }) satisfies ConstantNodeData,
+            }) satisfies InputNodeData,
     },
-    display: {
+    _output: {
         name: "Output",
         component: OutputNodeComponent,
         properties: OutputProperties,
@@ -70,6 +75,19 @@ export const Nodes: Record<string, NodeRegistration> = {
         properties: AdderProperties,
         simulation: AdderSimulatorNode,
         createData: () => ({}),
+    },
+    custom: {
+        name: "Custom",
+        component: CustomNodeComponent,
+        properties: AdderProperties,
+        simulation: CustomSimulatorNode,
+        createData: () =>
+            ({
+                nodes: [],
+                edges: [],
+                inputs: [],
+                outputs: [],
+            }) satisfies CustomNodeData,
     },
 };
 

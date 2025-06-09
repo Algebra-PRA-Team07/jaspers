@@ -37,15 +37,17 @@ export const NewGateButton: FC = () => {
                     <CommandList>
                         <CommandEmpty>No nodes found.</CommandEmpty>
                         <CommandGroup>
-                            {Object.entries(Nodes).map(([node, registration]) => (
-                                <CommandItem
-                                    key={registration.name}
-                                    value={node}
-                                    onSelect={onSelect}
-                                >
-                                    {registration.name}
-                                </CommandItem>
-                            ))}
+                            {Object.entries(Nodes)
+                                .filter(([node]) => node !== "custom")
+                                .map(([node, registration]) => (
+                                    <CommandItem
+                                        key={registration.name}
+                                        value={node}
+                                        onSelect={onSelect}
+                                    >
+                                        {registration.name}
+                                    </CommandItem>
+                                ))}
                         </CommandGroup>
                     </CommandList>
                 </Command>

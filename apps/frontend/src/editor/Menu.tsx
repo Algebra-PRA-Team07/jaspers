@@ -9,6 +9,33 @@ import {
     MenubarSeparator,
     MenubarTrigger,
 } from "@/components/ui/menubar.tsx";
+import { useEditorState } from "@/editor/editorState.ts";
+
+const Edit: FC = () => {
+    const selectedNodes = useEditorState.use.selectedNodes();
+    const createCustomNode = useEditorState.use.createCustomNode();
+
+    return (
+        <MenubarMenu>
+            <MenubarTrigger>Edit</MenubarTrigger>
+            <MenubarContent>
+                <MenubarItem>Undo</MenubarItem>
+                <MenubarItem>Redo</MenubarItem>
+                <MenubarSeparator />
+                <MenubarItem
+                    onClick={() => createCustomNode()}
+                    disabled={selectedNodes.length === 0}
+                >
+                    Create Custom Node
+                </MenubarItem>
+                <MenubarSeparator />
+                <MenubarItem>Cut</MenubarItem>
+                <MenubarItem>Copy</MenubarItem>
+                <MenubarItem>Paste</MenubarItem>
+            </MenubarContent>
+        </MenubarMenu>
+    );
+};
 
 export const Menu: FC = () => {
     return (
@@ -25,17 +52,7 @@ export const Menu: FC = () => {
                         </MenubarContent>
                     </MenubarMenu>
 
-                    <MenubarMenu>
-                        <MenubarTrigger>Edit</MenubarTrigger>
-                        <MenubarContent>
-                            <MenubarItem>Undo</MenubarItem>
-                            <MenubarItem>Redo</MenubarItem>
-                            <MenubarSeparator />
-                            <MenubarItem>Cut</MenubarItem>
-                            <MenubarItem>Copy</MenubarItem>
-                            <MenubarItem>Paste</MenubarItem>
-                        </MenubarContent>
-                    </MenubarMenu>
+                    <Edit />
 
                     <MenubarMenu>
                         <MenubarTrigger>Simulation</MenubarTrigger>

@@ -11,9 +11,11 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
-import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
+import { CustomNode } from "@/editor/nodes/CustomNode.tsx";
 import { GateNode } from "@/editor/nodes/GateNode.tsx";
+import { InputNode } from "@/editor/nodes/InputNode.tsx";
 import { Nodes } from "@/editor/nodes/nodes.ts";
+import { OutputNode } from "@/editor/nodes/OutputNode.tsx";
 import { createSelectors } from "@/lib/zustand.ts";
 
 import { Simulator } from "./simulation/simulator.ts";
@@ -43,6 +45,8 @@ interface EditorState {
     pauseSimulation: () => void;
     continueSimulation: () => void;
     stopSimulation: () => void;
+
+    createCustomNode: () => void;
 }
 
 const useEditorStateBase = create<EditorState>((set, get) => ({
@@ -101,21 +105,28 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
 
         {
             id: "enable",
-            type: "constant",
+            type: "_input",
             position: { x: 200, y: 200 },
             data: {
                 desiredState: "off",
             },
-        } satisfies ConstantNode,
+        } satisfies InputNode,
 
         {
             id: "data",
-            type: "constant",
+            type: "_input",
             position: { x: 35, y: 200 },
             data: {
                 desiredState: "off",
             },
-        } satisfies ConstantNode,
+        } satisfies InputNode,
+
+        {
+            id: "output",
+            type: "_output",
+            position: { x: 600, y: 100 },
+            data: {},
+        } satisfies OutputNode,
     ],
     edges: [
         { id: nanoid(), source: "nor-1", sourceHandle: "out", target: "nor-2", targetHandle: "a" },
@@ -206,9 +217,8 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
     },
 
     restartSimulation: () => {
-        const simulator = new Simulator(get().nodes, get().edges);
-
-        const nodes = simulator.runFullSimulation();
+        const simulator = new Simulator();
+        const nodes = simulator.runFreshSimulation(get().nodes, get().edges);
 
         set({
             simulatorState: "running",
@@ -250,6 +260,34 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                     simulator: undefined,
                 },
             })),
+        });
+    },
+
+    createCustomNode: () => {
+        const nodes = get().selectedNodes.length === 0 ? get().nodes : get().selectedNodes;
+
+        const edges: Edge[] = get().edges.filter((edge) =>
+            nodes.find((node) => node.id === edge.target),
+        ); // Only include edges that have targets inside the selectedNodes
+
+        const customNode: CustomNode = {
+            id: nanoid(),
+            type: "custom",
+            position: { x: 300, y: 200 },
+            data: {
+                nodes,
+                edges,
+                inputs: nodes.filter((node) => node.type === "_input").map((node) => node.id),
+                outputs: nodes.filter((node) => node.type === "_output").map((node) => node.id),
+            },
+        };
+
+        set({
+            nodes: get()
+                .nodes.filter((node) => !nodes.some((n) => n.id === node.id))
+                .concat(customNode),
+
+            edges: get().edges.filter((edge) => !edges.includes(edge)),
         });
     },
 }));
