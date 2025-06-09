@@ -4,21 +4,21 @@ import { EdgeStates, LogicNode, LogicNodeData, LogicState, SimulatorNode } from 
 
 import { BaseNode } from "./BaseNode.tsx";
 
-export interface ConstantNodeData extends LogicNodeData {
+export interface InputNodeData extends LogicNodeData {
     desiredState: LogicState;
 }
 
-export type ConstantNode = LogicNode<ConstantNodeData, "constant">;
+export type InputNode = LogicNode<InputNodeData, "_input">;
 
-export class ConstantSimulatorNode extends SimulatorNode {
-    override calculateNewState(data: ConstantNodeData, _inputs: EdgeStates): EdgeStates {
+export class InputSimulatorNode extends SimulatorNode {
+    override calculateNewState(data: InputNodeData, _inputs: EdgeStates): EdgeStates {
         return {
             out: data.desiredState,
         };
     }
 }
 
-export const ConstantNodeComponent = ({ data, selected }: NodeProps<ConstantNode>) => {
+export const InputNodeComponent = ({ data, selected }: NodeProps<InputNode>) => {
     return (
         <>
             <BaseNode

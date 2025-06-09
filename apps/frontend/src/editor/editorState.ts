@@ -11,8 +11,8 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
-import { ConstantNode } from "@/editor/nodes/ConstantNode.tsx";
 import { GateNode } from "@/editor/nodes/GateNode.tsx";
+import { InputNode } from "@/editor/nodes/InputNode.tsx";
 import { Nodes } from "@/editor/nodes/nodes.ts";
 import { createSelectors } from "@/lib/zustand.ts";
 
@@ -101,21 +101,28 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
 
         {
             id: "enable",
-            type: "constant",
+            type: "_input",
             position: { x: 200, y: 200 },
             data: {
                 desiredState: "off",
             },
-        } satisfies ConstantNode,
+        } satisfies InputNode,
 
         {
             id: "data",
-            type: "constant",
+            type: "_input",
             position: { x: 35, y: 200 },
             data: {
                 desiredState: "off",
             },
-        } satisfies ConstantNode,
+        } satisfies InputNode,
+
+        {
+            id: "output",
+            type: "_output",
+            position: { x: 600, y: 100 },
+            data: {},
+        } satisfies OutputNode,
     ],
     edges: [
         { id: nanoid(), source: "nor-1", sourceHandle: "out", target: "nor-2", targetHandle: "a" },
