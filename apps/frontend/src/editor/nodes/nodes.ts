@@ -4,6 +4,10 @@ import { ComponentType } from "react";
 
 import { AdderNodeComponent, AdderSimulatorNode } from "@/editor/nodes/AdderNode.tsx";
 import {
+    CustomNodeComponent,
+    CustomNodeData,
+    CustomSimulatorNode,
+} from "@/editor/nodes/CustomNode.tsx";
 import { GateNodeComponent, GateNodeData, GateSimulatorNode } from "@/editor/nodes/GateNode.tsx";
 import {
     InputNodeComponent,
@@ -71,6 +75,19 @@ export const Nodes: Record<string, NodeRegistration> = {
         properties: AdderProperties,
         simulation: AdderSimulatorNode,
         createData: () => ({}),
+    },
+    custom: {
+        name: "Custom",
+        component: CustomNodeComponent,
+        properties: AdderProperties,
+        simulation: CustomSimulatorNode,
+        createData: () =>
+            ({
+                nodes: [],
+                edges: [],
+                inputs: [],
+                outputs: [],
+            }) satisfies CustomNodeData,
     },
 };
 
