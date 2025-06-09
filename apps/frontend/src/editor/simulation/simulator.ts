@@ -1,6 +1,6 @@
 import { Edge } from "@xyflow/react";
 
-import { getRegisteredNodesProperty } from "@/editor/nodes/nodes.ts";
+import { NodeType, REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
 import { EdgeStates, LogicNode, LogicState, SimulatorNode } from "@/editor/types.ts";
 
 export class Simulator {
@@ -8,9 +8,9 @@ export class Simulator {
     private edges: Edge[] = [];
 
     private createSimulatorNode(node: LogicNode): SimulatorNode {
-        const simulatorNodes = getRegisteredNodesProperty("simulation");
+        const simulatorNodes = REGISTERED_NODES_PROPERTIES["simulation"];
 
-        return new simulatorNodes[node.type!]();
+        return new simulatorNodes[node.type! as NodeType]();
     }
 
     private getNodeWithId(id: string): LogicNode | undefined {

@@ -40,7 +40,7 @@ export interface NodeRegistration {
     createData: () => LogicNodeData;
 }
 
-export const Nodes: Record<string, NodeRegistration> = {
+export const Nodes = {
     gate: {
         name: "Gate",
         component: GateNodeComponent,
@@ -89,10 +89,21 @@ export const Nodes: Record<string, NodeRegistration> = {
                 outputs: [],
             }) satisfies CustomNodeData,
     },
+} satisfies Record<string, NodeRegistration>;
+
+export type NodeType = keyof typeof Nodes;
+
+type NodePropertiesObject = {
+    [k in keyof NodeRegistration]: Record<NodeType, NodeRegistration[k]>;
 };
 
-export const getRegisteredNodesProperty = <K extends keyof NodeRegistration>(property: K) => {
-    return Object.fromEntries(
-        Object.entries(Nodes).map(([key, value]) => [key, value[property]]),
-    ) as Record<string, NodeRegistration[K]>;
-};
+// type safe enough
+export const REGISTERED_NODES_PROPERTIES: NodePropertiesObject = Object.fromEntries(
+    (["name", "component", "properties", "simulation", "createData"] as const).map((field) => [
+        field,
+        Object.fromEntries(Object.entries(Nodes).map(([key, value]) => [key, value[field]])),
+    ]),
+) as Record<
+    keyof NodeRegistration,
+    Record<NodeType, NodeRegistration[keyof NodeRegistration]>
+> as NodePropertiesObject;

@@ -14,7 +14,7 @@ import { create } from "zustand/react";
 import { CustomNode } from "@/editor/nodes/CustomNode.tsx";
 import { GateNode } from "@/editor/nodes/GateNode.tsx";
 import { InputNode } from "@/editor/nodes/InputNode.tsx";
-import { Nodes } from "@/editor/nodes/nodes.ts";
+import { Nodes, NodeType } from "@/editor/nodes/nodes.ts";
 import { OutputNode } from "@/editor/nodes/OutputNode.tsx";
 import { createSelectors } from "@/lib/zustand.ts";
 
@@ -35,7 +35,7 @@ interface EditorState {
     onConnect: OnConnect;
     onSelectionChange: OnSelectionChangeFunc<LogicNode>;
 
-    createNode: (nodeType: string) => void;
+    createNode: (nodeType: NodeType) => void;
     addNode: (node: LogicNode) => void;
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 
@@ -175,7 +175,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         });
     },
 
-    createNode: (nodeType: string) => {
+    createNode: (nodeType: NodeType) => {
         const newNode: LogicNode = {
             id: nanoid(),
             position: { x: 300, y: 200 },

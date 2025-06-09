@@ -3,9 +3,9 @@ import { FC, useMemo } from "react";
 import { NewGateButton } from "@/editor/properties/NewGateButton.tsx";
 
 import { useEditorState } from "./editorState.ts";
-import { getRegisteredNodesProperty } from "./nodes/nodes.ts";
+import { NodeType, REGISTERED_NODES_PROPERTIES } from "./nodes/nodes.ts";
 
-const properties = getRegisteredNodesProperty("properties");
+const properties = REGISTERED_NODES_PROPERTIES["properties"];
 
 export const Properties: FC = () => {
     const selectedNodes = useEditorState((s) => s.selectedNodes);
@@ -15,7 +15,7 @@ export const Properties: FC = () => {
     const NodeProperties = useMemo(() => {
         if (!selection) return undefined;
 
-        return properties[selection.type!];
+        return properties[selection.type! as NodeType];
     }, [selection]);
 
     return (

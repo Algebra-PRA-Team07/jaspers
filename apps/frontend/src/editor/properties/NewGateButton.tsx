@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/command.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
-import { Nodes } from "@/editor/nodes/nodes.ts";
+import { Nodes, NodeType } from "@/editor/nodes/nodes.ts";
 
 export const NewGateButton: FC = React.memo(() => {
     const createNode = useEditorState.use.createNode();
@@ -19,7 +19,7 @@ export const NewGateButton: FC = React.memo(() => {
     const [open, setOpen] = useState(false);
 
     const onSelect = useCallback(
-        (nodeType: string) => {
+        (nodeType: NodeType) => {
             createNode(nodeType);
             setOpen(false);
         },
@@ -43,7 +43,7 @@ export const NewGateButton: FC = React.memo(() => {
                                     <CommandItem
                                         key={registration.name}
                                         value={node}
-                                        onSelect={onSelect}
+                                        onSelect={(type) => onSelect(type as NodeType)}
                                     >
                                         {registration.name}
                                     </CommandItem>
