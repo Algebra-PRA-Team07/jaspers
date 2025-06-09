@@ -213,9 +213,8 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
     },
 
     restartSimulation: () => {
-        const simulator = new Simulator(get().nodes, get().edges);
-
-        const nodes = simulator.runFullSimulation();
+        const simulator = new Simulator();
+        const nodes = simulator.runFreshSimulation(get().nodes, get().edges);
 
         set({
             simulatorState: "running",
