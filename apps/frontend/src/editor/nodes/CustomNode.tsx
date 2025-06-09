@@ -20,9 +20,7 @@ export class CustomSimulatorNode extends SimulatorNode {
     private simulator?: Simulator;
 
     override calculateNewState(data: CustomNodeData, inputs: EdgeStates): EdgeStates {
-        if (!this.simulator) {
-            this.simulator = new Simulator();
-        }
+        this.simulator ??= new Simulator();
 
         data.nodes = data.nodes.map((node) => {
             if (node.type !== "_input") return node;
@@ -38,7 +36,7 @@ export class CustomSimulatorNode extends SimulatorNode {
             };
         });
 
-        data.nodes = this.simulator!.updateSimulation(null, data.nodes, data.edges);
+        data.nodes = this.simulator.updateSimulation(null, data.nodes, data.edges);
 
         const outputNodes = data.nodes.filter((node) => data.outputs.includes(node.id));
 
