@@ -4,7 +4,7 @@ import { EdgeStates, LogicNode, LogicNodeData, SimulatorNode } from "@/editor/ty
 
 import { BaseNode } from "./BaseNode.tsx";
 
-export type OutputNode = LogicNode<LogicNodeData, "display">;
+export type OutputNode = LogicNode<LogicNodeData, "_output">;
 
 export class OutputSimulatorNode extends SimulatorNode {
     override calculateNewState(_: LogicNodeData, _inputs: EdgeStates): EdgeStates {

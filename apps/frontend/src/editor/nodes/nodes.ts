@@ -57,7 +57,7 @@ export const Nodes: Record<string, NodeRegistration> = {
                 desiredState: "off",
             }) satisfies ConstantNodeData,
     },
-    display: {
+    _output: {
         name: "Output",
         component: OutputNodeComponent,
         properties: OutputProperties,
