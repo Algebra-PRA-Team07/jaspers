@@ -18,7 +18,6 @@ export const Editor: FC = () => {
                 <SimulatorControlBar />
             </div>
 
-            <Properties />
             <Menu />
         </>
     );
