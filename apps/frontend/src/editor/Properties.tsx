@@ -34,8 +34,10 @@ export const Properties: FC = () => {
                 </>
             ) : selectedNodes.length > 1 ? (
                 <Placeholder text={"Multiple Selection"} />
-            ) : (
+            ) : selectedNodes.length === 0 ? (
                 <Placeholder text={"No Selection"} />
+            ) : (
+                <Placeholder text={"Not Applicable"} />
             )}
 
             <NewGateButton />
