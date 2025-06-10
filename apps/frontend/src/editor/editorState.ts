@@ -26,6 +26,9 @@ type SimulatorState = "stopped" | "paused" | "running";
 interface EditorState {
     simulatorState: SimulatorState;
 
+    showProperties: boolean;
+    toggleProperties: () => void;
+
     nodes: LogicNode[];
     edges: Edge[];
     selectedNodes: LogicNode[];
@@ -51,6 +54,11 @@ interface EditorState {
 
 const useEditorStateBase = create<EditorState>((set, get) => ({
     simulatorState: "stopped",
+
+    showProperties: true,
+    toggleProperties: () => {
+        set({ showProperties: !get().showProperties });
+    },
 
     nodes: [
         {

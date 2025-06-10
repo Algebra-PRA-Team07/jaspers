@@ -37,6 +37,22 @@ const Edit: FC = () => {
     );
 };
 
+const View: FC = () => {
+    const showProperties = useEditorState.use.showProperties();
+    const toggleProperties = useEditorState.use.toggleProperties();
+
+    return (
+        <MenubarMenu>
+            <MenubarTrigger>View</MenubarTrigger>
+            <MenubarContent>
+                <MenubarCheckboxItem checked={showProperties} onClick={() => toggleProperties()}>
+                    Show Properties
+                </MenubarCheckboxItem>
+            </MenubarContent>
+        </MenubarMenu>
+    );
+};
+
 export const Menu: FC = () => {
     return (
         <div className="fixed top-0 left-0 w-screen p-4">
@@ -61,12 +77,7 @@ export const Menu: FC = () => {
                         </MenubarContent>
                     </MenubarMenu>
 
-                    <MenubarMenu>
-                        <MenubarTrigger>View</MenubarTrigger>
-                        <MenubarContent>
-                            <MenubarCheckboxItem checked>Show Properties</MenubarCheckboxItem>
-                        </MenubarContent>
-                    </MenubarMenu>
+                    <View />
                 </div>
 
                 <div className="flex flex-1 justify-center space-x-4">

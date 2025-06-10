@@ -14,12 +14,10 @@ import {
     InputNodeData,
     InputSimulatorNode,
 } from "@/editor/nodes/InputNode.tsx";
-import { AdderProperties } from "@/editor/properties/AdderProperties.tsx";
 import { GateProperties } from "@/editor/properties/GateProperties.tsx";
 import { InputProperties } from "@/editor/properties/InputProperties.tsx";
 import { LogicNodeData, SimulatorNode } from "@/editor/types.ts";
 
-import { OutputProperties } from "../properties/OutputProperties";
 import { OutputNodeComponent, OutputSimulatorNode } from "./OutputNode";
 
 type AnyNodeComponent = ComponentType<
@@ -35,7 +33,7 @@ type AnyPropertiesComponent = ComponentType<{ node: any }>;
 export interface NodeRegistration {
     name: string;
     component: AnyNodeComponent;
-    properties: AnyPropertiesComponent;
+    properties: AnyPropertiesComponent | null;
     simulation: typeof SimulatorNode;
     createData: () => LogicNodeData;
 }
@@ -65,21 +63,21 @@ export const Nodes = {
     _output: {
         name: "Output",
         component: OutputNodeComponent,
-        properties: OutputProperties,
+        properties: null,
         simulation: OutputSimulatorNode,
         createData: () => ({}),
     },
     adder: {
         name: "Half Adder",
         component: AdderNodeComponent,
-        properties: AdderProperties,
+        properties: null,
         simulation: AdderSimulatorNode,
         createData: () => ({}),
     },
     custom: {
         name: "Custom",
         component: CustomNodeComponent,
-        properties: AdderProperties,
+        properties: null,
         simulation: CustomSimulatorNode,
         createData: () =>
             ({
