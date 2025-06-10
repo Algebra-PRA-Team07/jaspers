@@ -3,11 +3,7 @@ import { NodeProps } from "@xyflow/react";
 import { ComponentType } from "react";
 
 import { AdderNodeComponent, AdderSimulatorNode } from "@/editor/nodes/AdderNode.tsx";
-import {
-    CustomNodeComponent,
-    CustomNodeData,
-    CustomSimulatorNode,
-} from "@/editor/nodes/CustomNode.tsx";
+import { CustomNodeComponent, CustomSimulatorNode } from "@/editor/nodes/CustomNode.tsx";
 import { GateNodeComponent, GateNodeData, GateSimulatorNode } from "@/editor/nodes/GateNode.tsx";
 import {
     InputNodeComponent,
@@ -79,13 +75,7 @@ export const Nodes = {
         component: CustomNodeComponent,
         properties: null,
         simulation: CustomSimulatorNode,
-        createData: () =>
-            ({
-                nodes: [],
-                edges: [],
-                inputs: [],
-                outputs: [],
-            }) satisfies CustomNodeData,
+        createData: () => ({}),
     },
 } satisfies Record<string, NodeRegistration>;
 

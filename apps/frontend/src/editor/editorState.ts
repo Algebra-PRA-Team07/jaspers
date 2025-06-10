@@ -11,7 +11,7 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
-import { CustomNode } from "@/editor/nodes/CustomNode.tsx";
+import { CustomNode, CustomNodeData } from "@/editor/nodes/CustomNode.tsx";
 import { GateNode } from "@/editor/nodes/GateNode.tsx";
 import { InputNode } from "@/editor/nodes/InputNode.tsx";
 import { Nodes, NodeType } from "@/editor/nodes/nodes.ts";
@@ -38,8 +38,7 @@ interface EditorState {
     onConnect: OnConnect;
     onSelectionChange: OnSelectionChangeFunc<LogicNode>;
 
-    createNode: (nodeType: NodeType) => void;
-    addNode: (node: LogicNode) => void;
+    addNode: (nodeType: NodeType) => void;
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 
     simulator?: Simulator;
@@ -49,6 +48,8 @@ interface EditorState {
     continueSimulation: () => void;
     stopSimulation: () => void;
 
+    customNodes: CustomNodeData[];
+    addCustomNode: (customNode: CustomNodeData) => void;
     createCustomNode: () => void;
 }
 
@@ -183,7 +184,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         });
     },
 
-    createNode: (nodeType: NodeType) => {
+    addNode: (nodeType: NodeType) => {
         const newNode: LogicNode = {
             id: nanoid(),
             position: { x: 300, y: 200 },
@@ -193,12 +194,6 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
 
         set({
             nodes: get().nodes.concat(newNode),
-        });
-    },
-
-    addNode: (node: LogicNode) => {
-        set({
-            nodes: get().nodes.concat(node),
         });
     },
 
@@ -279,6 +274,21 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         });
     },
 
+    customNodes: [],
+
+    addCustomNode: (customNode: CustomNodeData) => {
+        const node: CustomNode = {
+            id: nanoid(),
+            type: "custom",
+            position: { x: 300, y: 200 },
+            data: customNode,
+        };
+
+        set({
+            nodes: get().nodes.concat(node),
+        });
+    },
+
     createCustomNode: () => {
         const nodes = get().selectedNodes.length === 0 ? get().nodes : get().selectedNodes;
 
@@ -286,24 +296,30 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
             nodes.find((node) => node.id === edge.target),
         ); // Only include edges that have targets inside the selectedNodes
 
-        const customNode: CustomNode = {
+        const customNodeData: CustomNodeData = {
+            id: nanoid(),
+            name: "CustomNode",
+            nodes,
+            edges,
+            inputs: nodes.filter((node) => node.type === "_input").map((node) => node.id),
+            outputs: nodes.filter((node) => node.type === "_output").map((node) => node.id),
+        };
+
+        const node: CustomNode = {
             id: nanoid(),
             type: "custom",
             position: { x: 300, y: 200 },
-            data: {
-                nodes,
-                edges,
-                inputs: nodes.filter((node) => node.type === "_input").map((node) => node.id),
-                outputs: nodes.filter((node) => node.type === "_output").map((node) => node.id),
-            },
+            data: customNodeData,
         };
 
         set({
             nodes: get()
                 .nodes.filter((node) => !nodes.some((n) => n.id === node.id))
-                .concat(customNode),
+                .concat(node),
 
             edges: get().edges.filter((edge) => !edges.includes(edge)),
+
+            customNodes: get().customNodes.concat(customNodeData),
         });
     },
 }));

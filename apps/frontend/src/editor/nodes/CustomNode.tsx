@@ -7,6 +7,9 @@ import { Simulator } from "@/editor/simulation/simulator.ts";
 import { EdgeStates, LogicNode, LogicNodeData, SimulatorNode } from "@/editor/types.ts";
 
 export interface CustomNodeData extends LogicNodeData {
+    id: string;
+    name: string;
+
     nodes: LogicNode[];
     edges: Edge[];
 
@@ -80,7 +83,7 @@ const HandleGroup: FC<{ ids: string[]; type: HandleType; position: Position }> =
 export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) => {
     return (
         <>
-            <BaseNode selected={selected}>CustomNode</BaseNode>
+            <BaseNode selected={selected}>{data.name}</BaseNode>
             <HandleGroup ids={data.inputs} type={"target"} position={Position.Left} />
             <HandleGroup ids={data.outputs} type={"source"} position={Position.Right} />
         </>
