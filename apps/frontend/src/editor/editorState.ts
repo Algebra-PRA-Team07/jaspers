@@ -50,7 +50,7 @@ interface EditorState {
 
     customNodes: CustomNodeData[];
     addCustomNode: (customNode: CustomNodeData) => void;
-    createCustomNode: () => void;
+    createCustomNode: (name: string) => void;
 }
 
 const useEditorStateBase = create<EditorState>((set, get) => ({
@@ -289,7 +289,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         });
     },
 
-    createCustomNode: () => {
+    createCustomNode: (name: string) => {
         const nodes = get().selectedNodes.length === 0 ? get().nodes : get().selectedNodes;
 
         const edges: Edge[] = get().edges.filter((edge) =>
@@ -298,7 +298,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
 
         const customNodeData: CustomNodeData = {
             id: nanoid(),
-            name: "CustomNode",
+            name,
             nodes,
             edges,
             inputs: nodes.filter((node) => node.type === "_input").map((node) => node.id),
