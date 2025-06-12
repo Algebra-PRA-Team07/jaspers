@@ -1,5 +1,6 @@
-import { FC, useCallback } from "react";
+import { ChangeEventHandler, FC, useCallback } from "react";
 
+import { Input } from "@/components/ui/input.tsx";
 import {
     Select,
     SelectContent,
@@ -21,18 +22,29 @@ export const InputProperties: FC<{ node: InputNode }> = ({ node }) => {
         [updateNodeData, node],
     );
 
+    const onNameChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+        (event) => {
+            updateNodeData(node.id, { name: event.target.value });
+        },
+        [node.id, updateNodeData],
+    );
+
     return (
-        <Select value={node.data.desiredState} onValueChange={onStateChange}>
-            <SelectTrigger>
-                <SelectValue placeholder="Select gate type" />
-            </SelectTrigger>
-            <SelectContent>
-                {["on", "off"].map((state) => (
-                    <SelectItem key={state} value={state}>
-                        {state.toUpperCase()}
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
+        <>
+            <Input placeholder="Name" value={node.data.name} onChange={onNameChange} />
+
+            <Select value={node.data.desiredState} onValueChange={onStateChange}>
+                <SelectTrigger>
+                    <SelectValue placeholder="Select gate type" />
+                </SelectTrigger>
+                <SelectContent>
+                    {["on", "off"].map((state) => (
+                        <SelectItem key={state} value={state}>
+                            {state.toUpperCase()}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </>
     );
 };

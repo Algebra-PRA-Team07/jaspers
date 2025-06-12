@@ -5,6 +5,7 @@ import { EdgeStates, LogicNode, LogicNodeData, LogicState, SimulatorNode } from 
 import { BaseNode } from "./BaseNode.tsx";
 
 export interface InputNodeData extends LogicNodeData {
+    name: string;
     desiredState: LogicState;
 }
 

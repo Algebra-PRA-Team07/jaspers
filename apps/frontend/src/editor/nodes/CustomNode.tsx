@@ -1,10 +1,18 @@
 import { Edge, Handle, HandleType, NodeProps, Position } from "@xyflow/react";
 import { FC } from "react";
 
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 import { BaseNode } from "@/editor/nodes/BaseNode.tsx";
 import { InputNode } from "@/editor/nodes/InputNode.tsx";
 import { Simulator } from "@/editor/simulation/simulator.ts";
 import { EdgeStates, LogicNode, LogicNodeData, SimulatorNode } from "@/editor/types.ts";
+
+type PinDefinition = { id: string; name: string };
 
 export interface CustomNodeData extends LogicNodeData {
     id: string;
@@ -13,8 +21,8 @@ export interface CustomNodeData extends LogicNodeData {
     nodes: LogicNode[];
     edges: Edge[];
 
-    inputs: string[]; // Input node ids
-    outputs: string[]; // Output node ids
+    inputs: PinDefinition[]; // Input nodes
+    outputs: PinDefinition[]; // Output nodes
 }
 
 export type CustomNode = LogicNode<CustomNodeData, "custom">;
@@ -41,7 +49,9 @@ export class CustomSimulatorNode extends SimulatorNode {
 
         data.nodes = this.simulator.updateSimulation(null, data.nodes, data.edges);
 
-        const outputNodes = data.nodes.filter((node) => data.outputs.includes(node.id));
+        const outputNodes = data.nodes.filter((node) =>
+            data.outputs.some((pin) => pin.id === node.id),
+        );
 
         return Object.fromEntries(
             outputNodes.map((outputNode) => [
@@ -52,8 +62,8 @@ export class CustomSimulatorNode extends SimulatorNode {
     }
 }
 
-const HandleGroup: FC<{ ids: string[]; type: HandleType; position: Position }> = ({
-    ids,
+const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = ({
+    pins,
     type,
     position,
 }) => {
@@ -62,18 +72,24 @@ const HandleGroup: FC<{ ids: string[]; type: HandleType; position: Position }> =
 
     return (
         <>
-            {ids.map((id, index) => {
+            {pins.map((pin, index) => {
                 const top =
-                    ids.length === 1 ? 50 : start + ((end - start) * index) / (ids.length - 1);
+                    pins.length === 1 ? 50 : start + ((end - start) * index) / (pins.length - 1);
 
                 return (
-                    <Handle
-                        key={id}
-                        id={id}
-                        type={type}
-                        position={position}
-                        style={{ top: `${top}%` }}
-                    />
+                    <TooltipProvider key={pin.id} delayDuration={300}>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Handle
+                                    id={pin.id}
+                                    type={type}
+                                    position={position}
+                                    style={{ top: `${top}%` }}
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent>{pin.name}</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 );
             })}
         </>
@@ -84,8 +100,8 @@ export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) =
     return (
         <>
             <BaseNode selected={selected}>{data.name}</BaseNode>
-            <HandleGroup ids={data.inputs} type={"target"} position={Position.Left} />
-            <HandleGroup ids={data.outputs} type={"source"} position={Position.Right} />
+            <HandleGroup pins={data.inputs} type={"target"} position={Position.Left} />
+            <HandleGroup pins={data.outputs} type={"source"} position={Position.Right} />
         </>
     );
 };

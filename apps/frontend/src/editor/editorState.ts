@@ -117,6 +117,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
             type: "_input",
             position: { x: 200, y: 200 },
             data: {
+                name: "Enable",
                 desiredState: "off",
             },
         } satisfies InputNode,
@@ -126,6 +127,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
             type: "_input",
             position: { x: 35, y: 200 },
             data: {
+                name: "Data",
                 desiredState: "off",
             },
         } satisfies InputNode,
@@ -134,7 +136,9 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
             id: "output",
             type: "_output",
             position: { x: 600, y: 100 },
-            data: {},
+            data: {
+                name: "Output",
+            },
         } satisfies OutputNode,
     ],
     edges: [
@@ -301,8 +305,20 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
             name,
             nodes,
             edges,
-            inputs: nodes.filter((node) => node.type === "_input").map((node) => node.id),
-            outputs: nodes.filter((node) => node.type === "_output").map((node) => node.id),
+            inputs: nodes
+                .filter((node) => node.type === "_input")
+                .map((node) => {
+                    const input = node as InputNode;
+
+                    return { id: input.id, name: input.data.name };
+                }),
+            outputs: nodes
+                .filter((node) => node.type === "_output")
+                .map((node) => {
+                    const output = node as OutputNode;
+
+                    return { id: output.id, name: output.data.name };
+                }),
         };
 
         const node: CustomNode = {

@@ -12,6 +12,7 @@ import {
 } from "@/editor/nodes/InputNode.tsx";
 import { GateProperties } from "@/editor/properties/GateProperties.tsx";
 import { InputProperties } from "@/editor/properties/InputProperties.tsx";
+import { OutputProperties } from "@/editor/properties/OutputProperties.tsx";
 import { LogicNodeData, SimulatorNode } from "@/editor/types.ts";
 
 import { OutputNodeComponent, OutputSimulatorNode } from "./OutputNode";
@@ -53,13 +54,14 @@ export const Nodes = {
         simulation: InputSimulatorNode,
         createData: () =>
             ({
+                name: "",
                 desiredState: "off",
             }) satisfies InputNodeData,
     },
     _output: {
         name: "Output",
         component: OutputNodeComponent,
-        properties: null,
+        properties: OutputProperties,
         simulation: OutputSimulatorNode,
         createData: () => ({}),
     },
