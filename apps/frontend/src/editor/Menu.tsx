@@ -1,5 +1,15 @@
-import { FC } from "react";
+import React, { FC, useCallback, useState } from "react";
 
+import { Button } from "@/components/ui/button.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import {
     Menubar,
     MenubarCheckboxItem,
@@ -11,29 +21,71 @@ import {
 } from "@/components/ui/menubar.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
 
+const CustomNodeDialog: FC<{ open: boolean; onOpenChange: (open: boolean) => void }> = React.memo(
+    ({ open, onOpenChange }) => {
+        const createCustomNode = useEditorState.use.createCustomNode();
+
+        const [name, setName] = useState("My Custom Node");
+
+        const onSubmit = useCallback(() => {
+            createCustomNode(name);
+            onOpenChange(false);
+        }, [createCustomNode, name, onOpenChange]);
+
+        return (
+            <Dialog open={open} onOpenChange={onOpenChange}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Create Custom Node</DialogTitle>
+                    </DialogHeader>
+                    <div className="py-4 grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                            Name
+                        </Label>
+                        <Input
+                            id="name"
+                            value={name}
+                            onChange={(event) => setName(event.target.value)}
+                            className="col-span-3"
+                        />
+                    </div>
+                    <DialogFooter>
+                        <Button type="submit" onClick={onSubmit}>
+                            Create & Add
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        );
+    },
+);
+
 const Edit: FC = () => {
     const selectedNodes = useEditorState.use.selectedNodes();
-    const createCustomNode = useEditorState.use.createCustomNode();
+    const [customNodeDialogOpen, setCustomNodeDialogOpen] = useState(false);
 
     return (
-        <MenubarMenu>
-            <MenubarTrigger>Edit</MenubarTrigger>
-            <MenubarContent>
-                <MenubarItem>Undo</MenubarItem>
-                <MenubarItem>Redo</MenubarItem>
-                <MenubarSeparator />
-                <MenubarItem
-                    onClick={() => createCustomNode()}
-                    disabled={selectedNodes.length === 0}
-                >
-                    Create Custom Node
-                </MenubarItem>
-                <MenubarSeparator />
-                <MenubarItem>Cut</MenubarItem>
-                <MenubarItem>Copy</MenubarItem>
-                <MenubarItem>Paste</MenubarItem>
-            </MenubarContent>
-        </MenubarMenu>
+        <>
+            <CustomNodeDialog open={customNodeDialogOpen} onOpenChange={setCustomNodeDialogOpen} />
+            <MenubarMenu>
+                <MenubarTrigger>Edit</MenubarTrigger>
+                <MenubarContent>
+                    <MenubarItem>Undo</MenubarItem>
+                    <MenubarItem>Redo</MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem
+                        onClick={() => setCustomNodeDialogOpen(true)}
+                        disabled={selectedNodes.length === 0}
+                    >
+                        Create Custom Node
+                    </MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem>Cut</MenubarItem>
+                    <MenubarItem>Copy</MenubarItem>
+                    <MenubarItem>Paste</MenubarItem>
+                </MenubarContent>
+            </MenubarMenu>
+        </>
     );
 };
 
