@@ -10,6 +10,7 @@ import {
     InputNodeData,
     InputSimulatorNode,
 } from "@/editor/nodes/InputNode.tsx";
+import { NegateNodeComponent, NegateSimulatorNode } from "@/editor/nodes/NegateNode.tsx";
 import { GateProperties } from "@/editor/properties/GateProperties.tsx";
 import { InputProperties } from "@/editor/properties/InputProperties.tsx";
 import { OutputProperties } from "@/editor/properties/OutputProperties.tsx";
@@ -46,6 +47,13 @@ export const Nodes = {
                 gateType: "AND",
                 negated: false,
             }) satisfies GateNodeData,
+    },
+    negate: {
+        name: "NOT",
+        component: NegateNodeComponent,
+        properties: null,
+        simulation: NegateSimulatorNode,
+        createData: () => ({}),
     },
     _input: {
         name: "Input",
