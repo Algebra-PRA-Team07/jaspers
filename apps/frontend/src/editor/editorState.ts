@@ -14,6 +14,7 @@ import { create } from "zustand/react";
 import { CustomNode, CustomNodeData } from "@/editor/nodes/CustomNode.tsx";
 import { GateNode } from "@/editor/nodes/GateNode.tsx";
 import { InputNode } from "@/editor/nodes/InputNode.tsx";
+import { NegateNode } from "@/editor/nodes/NegateNode.tsx";
 import { Nodes, NodeType } from "@/editor/nodes/nodes.ts";
 import { OutputNode } from "@/editor/nodes/OutputNode.tsx";
 import { createSelectors } from "@/lib/zustand.ts";
@@ -104,13 +105,10 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
 
         {
             id: "not-1",
-            type: "gate",
+            type: "negate",
             position: { x: 150, y: 100 },
-            data: {
-                gateType: "NOT",
-                negated: false,
-            },
-        } satisfies GateNode,
+            data: {},
+        } satisfies NegateNode,
 
         {
             id: "enable",
@@ -151,7 +149,7 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         { id: nanoid(), source: "enable", sourceHandle: "out", target: "and-1", targetHandle: "b" },
         { id: nanoid(), source: "enable", sourceHandle: "out", target: "and-2", targetHandle: "a" },
 
-        { id: nanoid(), source: "data", sourceHandle: "out", target: "not-1", targetHandle: "a" },
+        { id: nanoid(), source: "data", sourceHandle: "out", target: "not-1", targetHandle: "in" },
         { id: nanoid(), source: "data", sourceHandle: "out", target: "and-2", targetHandle: "b" },
 
         {

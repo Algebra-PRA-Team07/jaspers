@@ -12,7 +12,7 @@ import {
     SimulatorNode,
 } from "@/editor/types.ts";
 
-type GateType = "AND" | "OR" | "XOR" | "NOT";
+type GateType = "AND" | "OR" | "XOR";
 
 export interface GateNodeData extends LogicNodeData {
     gateType: GateType;
@@ -37,9 +37,6 @@ export class GateSimulatorNode extends SimulatorNode {
             case "XOR": {
                 state = logicStateFromBool(inputs["a"] !== inputs["b"]);
                 break;
-            }
-            case "NOT": {
-                return { out: negate(inputs["a"]) };
             }
         }
 
