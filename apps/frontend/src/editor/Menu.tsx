@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
+import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -106,6 +107,12 @@ const View: FC = () => {
 };
 
 export const Menu: FC = () => {
+    const navigate = useNavigate();
+    const logout = useCallback(() => {
+        localStorage.removeItem("authToken");
+        navigate("/auth/login");
+    }, [navigate]);
+
     return (
         <div className="fixed top-0 left-0 w-screen p-4">
             <Menubar className="w-full flex">
@@ -140,9 +147,9 @@ export const Menu: FC = () => {
 
                 <div className="flex flex-1 justify-end space-x-4">
                     <MenubarMenu>
-                        <MenubarTrigger>Share</MenubarTrigger>
+                        <MenubarTrigger>User</MenubarTrigger>
                         <MenubarContent>
-                            <MenubarItem>Create link...</MenubarItem>
+                            <MenubarItem onClick={() => logout()}>Logout</MenubarItem>
                         </MenubarContent>
                     </MenubarMenu>
                 </div>

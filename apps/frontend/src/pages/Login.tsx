@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FC, useCallback, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
 
 import { useTRPC } from "../utils/trpc.ts";
@@ -11,11 +11,6 @@ export const LoggedIn: FC = () => {
 
     const navigate = useNavigate();
 
-    const logout = useCallback(() => {
-        localStorage.removeItem("authToken");
-        navigate("/auth/login");
-    }, [navigate]);
-
     useEffect(() => {
         const token = localStorage.getItem("authToken");
 
@@ -24,28 +19,7 @@ export const LoggedIn: FC = () => {
 
     if (!userData.isSuccess) return <span>Loading...</span>;
 
-    return (
-        <div className={"flex flex-col gap-4"}>
-            <div className={"flex gap-4 items-center rounded-lg bg-slate-800 px-4 py-3"}>
-                <img
-                    src={userData.data.picture_url}
-                    alt=""
-                    className={"rounded-full w-12 h-12 object-cover"}
-                />
-                <div className={"flex flex-col gap-1"}>
-                    <span>{userData.data.name}</span>
-                    <span className={"text-sm text-neutral-300"}>{userData.data.email}</span>
-                </div>
-            </div>
-            raw user data:
-            <pre className={"break-all whitespace-pre-wrap"}>
-                {JSON.stringify(userData.data, null, 2)}
-            </pre>
-            <button className={"rounded bg-slate-800 p-2"} onClick={logout}>
-                Logout
-            </button>
-        </div>
-    );
+    return <Navigate to={"/editor"} />;
 };
 
 export const LoginCallback: FC = () => {
