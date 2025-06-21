@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 import { Canvas } from "@/editor/Canvas.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
@@ -8,6 +9,13 @@ import { SimulatorControlBar } from "@/editor/SimulatorControlBar.tsx";
 
 export const Editor: FC = () => {
     const showProperties = useEditorState.use.showProperties();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+
+        if (!token) navigate("/auth/login");
+    }, [navigate]);
 
     return (
         <>
