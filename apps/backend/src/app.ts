@@ -2,6 +2,7 @@ import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 
 import { createContext } from "./context";
+import { initDatabase } from "./db/database";
 import { Globals } from "./globals";
 import { initOidc } from "./lib/oidc";
 import { Logger } from "./logging";
@@ -21,6 +22,7 @@ const server = createHTTPServer({
 });
 
 Promise.allSettled([
+    initDatabase(),
     initOidc()
         .then(() => Logger.info("OIDC initialized"))
         .catch((error) => Logger.panic("Failed to initialize OIDC", error)),

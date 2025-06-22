@@ -11,7 +11,7 @@ export const MainRoutes = createBrowserRouter([
     },
     {
         path: "/",
-        element: <Navigate to={"/auth/login"} />,
+        element: <Navigate to={"/auth/logged-in"} />,
     },
     {
         path: "auth",

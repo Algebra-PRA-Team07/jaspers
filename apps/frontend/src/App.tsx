@@ -25,7 +25,7 @@ function App() {
         createTRPCClient<AppRouter>({
             links: [
                 httpBatchLink({
-                    url: "http://localhost:3000",
+                    url: import.meta.env.DEV ? "http://localhost:3000" : "/api",
                     headers: () => {
                         const jwt = localStorage.getItem(LOCALSTORAGE_AUTH_KEY);
 

@@ -1,27 +1,28 @@
 {
-    "name": "jaspers",
-    "version": "1.0.0",
-    "repository": "https://github.com/Algebra-PRA-Team07/jaspers",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "preinstall": "npx only-allow pnpm",
-        "typecheck": "pnpm -r typecheck",
-        "lint": "eslint ."
-    },
-    "devDependencies": {
-        "@eslint/js": "^9.28.0",
-        "eslint": "^9.28.0",
-        "eslint-config-prettier": "^10.1.5",
-        "eslint-plugin-prettier": "^5.4.1",
-        "eslint-plugin-react-hooks": "^5.2.0",
-        "eslint-plugin-react-refresh": "^0.4.20",
-        "eslint-plugin-simple-import-sort": "^12.1.1",
-        "eslint-plugin-sonarjs": "^3.0.2",
-        "eslint-plugin-unicorn": "^58.0.0",
-        "eslint-plugin-unused-imports": "^4.1.4",
-        "globals": "^15.15.0",
-        "prettier": "^3.5.3",
-        "typescript-eslint": "^8.33.1"
-    }
+  "name": "jaspers",
+  "version": "1.0.0",
+  "repository": "https://github.com/Algebra-PRA-Team07/jaspers",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint .",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sonarjs": "^3.0.2",
+    "eslint-plugin-unicorn": "^58.0.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "globals": "^15.15.0",
+    "prettier": "^3.5.3",
+    "typescript-eslint": "^8.33.1"
+  }
 }
