@@ -50,7 +50,6 @@ export const LoginCallback: FC = () => {
         trpc.auth.oidc.login.mutationOptions({
             onSuccess: (data) => {
                 localStorage.setItem(LOCALSTORAGE_AUTH_KEY, data.jwt);
-                console.log(localStorage.getItem(LOCALSTORAGE_AUTH_KEY));
 
                 navigate("/auth/logged-in");
             },

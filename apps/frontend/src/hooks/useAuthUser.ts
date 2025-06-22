@@ -15,16 +15,12 @@ export const useAuthUser = (): UserData | null => {
     return useMemo(() => {
         if (!token) return null;
 
-        console.log(token);
-
         try {
             const split = token.split(".");
 
             if (split.length !== 3) return null;
 
             const data = JSON.parse(atob(split[1]));
-
-            console.log(data);
 
             return data as UserData;
         } catch {
