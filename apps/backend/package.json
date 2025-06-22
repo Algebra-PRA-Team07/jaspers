@@ -8,7 +8,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@jaspers/models": "workspace:^",
     "@lvksh/logger": "^1.6.4",
     "@trpc/server": "^11.0.4",
     "@types/md5": "^2.3.5",
