@@ -9,7 +9,7 @@ on:
       - "package.json"
       - "pnpm-lock.yaml"
       - "./.docker/**"
-      - ".github/workflows/deploy.yml"
+      - ".github/workflows/deploy.yaml"
 
 jobs:
   build:
