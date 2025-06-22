@@ -22,7 +22,9 @@ const server = createHTTPServer({
 });
 
 Promise.allSettled([
-    initDatabase(),
+    initDatabase()
+        .then(() => Logger.info("Database migrated"))
+        .catch((error) => Logger.panic("Failed to migrate database", error)),
     initOidc()
         .then(() => Logger.info("OIDC initialized"))
         .catch((error) => Logger.panic("Failed to initialize OIDC", error)),
