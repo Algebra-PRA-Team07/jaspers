@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useState } from "react";
-import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -21,6 +20,8 @@ import {
     MenubarTrigger,
 } from "@/components/ui/menubar.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
+import { useAuthUserUsklicnik } from "@/hooks/useAuthUserUsklicnik.ts";
+import { useLogout } from "@/hooks/useLogout.ts";
 
 const CustomNodeDialog: FC<{ open: boolean; onOpenChange: (open: boolean) => void }> = React.memo(
     ({ open, onOpenChange }) => {
@@ -107,11 +108,9 @@ const View: FC = () => {
 };
 
 export const Menu: FC = () => {
-    const navigate = useNavigate();
-    const logout = useCallback(() => {
-        localStorage.removeItem("authToken");
-        navigate("/auth/login");
-    }, [navigate]);
+    const logout = useLogout();
+
+    const user = useAuthUserUsklicnik();
 
     return (
         <div className="fixed top-0 left-0 w-screen p-4">
@@ -147,7 +146,11 @@ export const Menu: FC = () => {
 
                 <div className="flex flex-1 justify-end space-x-4">
                     <MenubarMenu>
-                        <MenubarTrigger>User</MenubarTrigger>
+                        <MenubarTrigger>
+                            <span>
+                                Welcome <span className={"font-bold"}>{user.name}</span>
+                            </span>
+                        </MenubarTrigger>
                         <MenubarContent>
                             <MenubarItem onClick={() => logout()}>Logout</MenubarItem>
                         </MenubarContent>

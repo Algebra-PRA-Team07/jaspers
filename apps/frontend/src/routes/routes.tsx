@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router";
 
+import { AuthContainer } from "@/pages/auth/AuthContainer.tsx";
 import { Editor } from "@/pages/Editor.tsx";
 import { LoggedIn, Login, LoginCallback } from "@/pages/Login.tsx";
 
@@ -13,15 +14,21 @@ export const MainRoutes = createBrowserRouter([
         element: <Navigate to={"/auth/login"} />,
     },
     {
-        path: "auth/login",
-        element: <Login />,
-    },
-    {
-        path: "auth/oidc/login",
-        element: <LoginCallback />,
-    },
-    {
-        path: "auth/data",
-        element: <LoggedIn />,
+        path: "auth",
+        element: <AuthContainer />,
+        children: [
+            {
+                path: "login",
+                element: <Login />,
+            },
+            {
+                path: "oidc/login",
+                element: <LoginCallback />,
+            },
+            {
+                path: "logged-in",
+                element: <LoggedIn />,
+            },
+        ],
     },
 ]);
