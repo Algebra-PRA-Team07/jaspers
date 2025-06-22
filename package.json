@@ -24,5 +24,8 @@
     "globals": "^15.15.0",
     "prettier": "^3.5.3",
     "typescript-eslint": "^8.33.1"
+  },
+  "dependencies": {
+    "husky": "^9.1.7"
   }
 }
