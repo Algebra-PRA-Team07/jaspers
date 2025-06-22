@@ -1,21 +1,25 @@
 import { FC, useEffect } from "react";
-import { useNavigate } from "react-router";
 
 import { Canvas } from "@/editor/Canvas.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
 import { Menu } from "@/editor/Menu.tsx";
 import { Properties } from "@/editor/Properties.tsx";
 import { SimulatorControlBar } from "@/editor/SimulatorControlBar.tsx";
+import { useAuthUser } from "@/hooks/useAuthUser.ts";
+import { useLogout } from "@/hooks/useLogout.ts";
 
 export const Editor: FC = () => {
     const showProperties = useEditorState.use.showProperties();
-    const navigate = useNavigate();
+
+    const user = useAuthUser();
+
+    const logout = useLogout();
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
+        if (user !== null) return;
 
-        if (!token) navigate("/auth/login");
-    }, [navigate]);
+        logout();
+    }, [user, logout]);
 
     return (
         <>

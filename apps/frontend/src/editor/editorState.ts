@@ -138,7 +138,13 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                 name: "Output",
             },
         } satisfies OutputNode,
-    ],
+    ].map((it) => ({
+        ...it,
+        position: {
+            x: it.position.x + 400,
+            y: it.position.y + 200,
+        },
+    })),
     edges: [
         { id: nanoid(), source: "nor-1", sourceHandle: "out", target: "nor-2", targetHandle: "a" },
         { id: nanoid(), source: "nor-2", sourceHandle: "out", target: "nor-1", targetHandle: "b" },

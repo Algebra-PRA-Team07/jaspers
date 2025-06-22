@@ -4,6 +4,8 @@ import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { useState } from "react";
 import { RouterProvider } from "react-router";
 
+import { LOCALSTORAGE_AUTH_KEY } from "@/pages/Login.tsx";
+
 import { MainRoutes } from "./routes/routes";
 import { TRPCProvider } from "./utils/trpc";
 
@@ -25,13 +27,13 @@ function App() {
                 httpBatchLink({
                     url: "http://localhost:3000",
                     headers: () => {
-                        const jwt = localStorage.getItem("authToken");
+                        const jwt = localStorage.getItem(LOCALSTORAGE_AUTH_KEY);
 
-                        if (!jwt) return {};
-
-                        return {
-                            Authorization: `Bearer ${jwt}`,
-                        };
+                        return jwt
+                            ? {
+                                  Authorization: `Bearer ${jwt}`,
+                              }
+                            : {};
                     },
                 }),
             ],

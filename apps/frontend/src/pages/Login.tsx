@@ -2,20 +2,39 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { FC, useEffect, useMemo } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
 
+import googleLogo from "/assets/google.png";
+import { useLogout } from "@/hooks/useLogout.ts";
+
 import { useTRPC } from "../utils/trpc.ts";
+
+// state manager, I hardly know 'er
+
+export const LOCALSTORAGE_AUTH_KEY = "@jaspers/authToken";
 
 export const LoggedIn: FC = () => {
     const trpc = useTRPC();
 
-    const userData = useQuery(trpc.auth.me.queryOptions());
+    const userData = useQuery(
+        trpc.auth.me.queryOptions(undefined, {
+            retry: false,
+        }),
+    );
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem(LOCALSTORAGE_AUTH_KEY);
 
         if (!token) navigate("/auth/login");
     }, [navigate]);
+
+    const logout = useLogout();
+
+    useEffect(() => {
+        if (!userData.isError) return;
+
+        logout();
+    }, [logout, userData]);
 
     if (!userData.isSuccess) return <span>Loading...</span>;
 
@@ -30,9 +49,10 @@ export const LoginCallback: FC = () => {
     const loginCallback = useMutation(
         trpc.auth.oidc.login.mutationOptions({
             onSuccess: (data) => {
-                // TODO: integrate with state management
-                localStorage.setItem("authToken", data.jwt);
-                navigate("/auth/data");
+                localStorage.setItem(LOCALSTORAGE_AUTH_KEY, data.jwt);
+                console.log(localStorage.getItem(LOCALSTORAGE_AUTH_KEY));
+
+                navigate("/auth/logged-in");
             },
         }),
     );
@@ -66,7 +86,7 @@ export const Login: FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem(LOCALSTORAGE_AUTH_KEY);
 
         if (token) navigate("/auth/data");
     }, [navigate]);
@@ -75,10 +95,11 @@ export const Login: FC = () => {
 
     return (
         <button
-            className={"rounded bg-slate-800 p-2"}
+            className={"rounded bg-slate-800 p-2 flex items-center gap-2"}
             onClick={() => (globalThis.location.href = loginUrl.data)}
         >
-            Log in with OIDC
+            <img src={googleLogo} className={"w-8 h-8"} alt={"Google logo"} />
+            Log in with Gugel
         </button>
     );
 };
