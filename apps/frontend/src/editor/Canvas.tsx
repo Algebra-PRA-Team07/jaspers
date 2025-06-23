@@ -3,10 +3,9 @@ import "@xyflow/react/dist/style.css";
 import { Background, Controls, ReactFlow } from "@xyflow/react";
 import { FC, useMemo } from "react";
 
-import { SkibidiEasterEgg } from "@/editor/easterEggs/SkibidiEasterEgg.tsx";
-import { ZeroTwoEasterEgg } from "@/editor/easterEggs/ZeroTwoEasterEgg.tsx";
+import { StickerNode } from "@/editor/easterEggs/StickerNode.tsx";
 import { REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
-import { useEasterEgg } from "@/hooks/useEasterEgg.ts";
+import { useStickerHandler } from "@/hooks/useStickerHandler.ts";
 
 import { useEditorState } from "./editorState.ts";
 
@@ -23,13 +22,12 @@ export const Canvas: FC = () => {
     const nodeTypesWithEasterEgg = useMemo(
         () => ({
             ...nodeTypes,
-            borna: ZeroTwoEasterEgg,
-            skibidi: SkibidiEasterEgg,
+            sticker: StickerNode,
         }),
         [],
     );
 
-    useEasterEgg();
+    useStickerHandler();
 
     return (
         <div className="h-screen">

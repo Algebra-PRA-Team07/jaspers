@@ -1,16 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useEditorState } from "@/editor/editorState.ts";
+import { STICKERS } from "@/lib/stickers.ts";
 
-const DEFAULT_NODE = {
-    position: {
-        x: 200,
-        y: 200,
-    },
-    data: {},
-};
+const maxKeyLength = Math.max(...Object.keys(STICKERS).map((it) => it.length));
 
-export const useEasterEgg = () => {
+export const useStickerHandler = () => {
     const listenerReference = useRef<(event: KeyboardEvent) => void | null>(null);
     const [keyState, setKeyState] = useState<string>("");
     const addNode = useEditorState.use._addNodeRaw();
@@ -19,27 +14,32 @@ export const useEasterEgg = () => {
         (key: string) => {
             if (key.length !== 1) return;
 
-            const newKeyState = keyState.length >= 3 ? keyState.slice(-3) + key : keyState + key;
+            const newKeyState =
+                keyState.length >= maxKeyLength
+                    ? keyState.slice(-maxKeyLength) + key
+                    : keyState + key;
 
             setKeyState(newKeyState);
 
-            if (newKeyState.endsWith("a02")) {
-                addNode({
-                    id: "02",
-                    type: "borna",
-                    ...DEFAULT_NODE,
-                });
+            const match = Object.entries(STICKERS)
+                .map(([k, v]) => ({ id: k, image: v }))
+                .find((it) => newKeyState.endsWith(it.id));
 
-                return;
-            }
+            if (!match) return;
 
-            if (newKeyState.endsWith("skib")) {
-                addNode({
-                    id: "skibidi",
-                    type: "skibidi",
-                    ...DEFAULT_NODE,
-                });
-            }
+            console.log("spawning", match);
+
+            addNode({
+                id: match.id,
+                type: "sticker",
+                position: {
+                    x: 200,
+                    y: 200,
+                },
+                data: {
+                    image: match.image,
+                },
+            });
         },
         [addNode, keyState, setKeyState],
     );

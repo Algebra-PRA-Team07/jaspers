@@ -3,8 +3,6 @@ import { Edge } from "@xyflow/react";
 import { NodeType, REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
 import { EdgeStates, LogicNode, LogicState, SimulatorNode } from "@/editor/types.ts";
 
-const EASTER_EGG_TYPES = new Set(["borna", "skibidi"]);
-
 export class Simulator {
     private nodes: LogicNode[] = [];
     private edges: Edge[] = [];
@@ -12,7 +10,7 @@ export class Simulator {
     private createSimulatorNode(node: LogicNode): SimulatorNode {
         const simulatorNodes = REGISTERED_NODES_PROPERTIES["simulation"];
 
-        if (!node.type || EASTER_EGG_TYPES.has(node.type)) return new SimulatorNode();
+        if (node.type === "sticker") return new SimulatorNode();
 
         return new simulatorNodes[node.type! as NodeType]();
     }
@@ -34,7 +32,7 @@ export class Simulator {
 
             const currentNode = queue.shift()!;
 
-            if (EASTER_EGG_TYPES.has(currentNode.type!)) continue;
+            if (currentNode.type === "sticker") continue;
 
             // 1. Process this node
             const simNode = currentNode.data.simulator;
