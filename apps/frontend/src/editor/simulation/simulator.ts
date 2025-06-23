@@ -76,13 +76,15 @@ export class Simulator {
         edges: Edge[],
     ): LogicNode[] {
         // recreate all (bad)
-        this.nodes = nodes.map((n) => ({
-            ...n,
-            data: {
-                ...n.data,
-                simulator: n.data.simulator ?? this.createSimulatorNode(n),
-            },
-        }));
+        this.nodes = nodes
+            .map((n) => ({
+                ...n,
+                data: {
+                    ...n.data,
+                    simulator: n.data.simulator ?? this.createSimulatorNode(n),
+                },
+            }))
+            .filter((it) => it.type !== "borna");
         this.edges = edges;
 
         if (affectedNode) {
@@ -98,13 +100,15 @@ export class Simulator {
 
     // This just recreates simulator nodes, effectively removing old simulation state for every node
     public runFreshSimulation(nodes: LogicNode[], edges: Edge[]): LogicNode[] {
-        const newNodes = nodes.map((n) => ({
-            ...n,
-            data: {
-                ...n.data,
-                simulator: undefined,
-            },
-        }));
+        const newNodes = nodes
+            .map((n) => ({
+                ...n,
+                data: {
+                    ...n.data,
+                    simulator: undefined,
+                },
+            }))
+            .filter((it) => it.type !== "borna");
 
         return this.updateSimulation(null, newNodes, edges);
     }

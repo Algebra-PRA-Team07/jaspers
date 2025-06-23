@@ -3,7 +3,9 @@ import "@xyflow/react/dist/style.css";
 import { Background, Controls, ReactFlow } from "@xyflow/react";
 import { FC } from "react";
 
+import { ZeroTwoEasterEgg } from "@/components/ZeroTwoEasterEgg.tsx";
 import { REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
+import { useEasterEgg } from "@/hooks/useEasterEgg.ts";
 
 import { useEditorState } from "./editorState.ts";
 
@@ -17,6 +19,8 @@ export const Canvas: FC = () => {
     const onConnect = useEditorState.use.onConnect();
     const onSelectionChange = useEditorState.use.onSelectionChange();
 
+    useEasterEgg();
+
     return (
         <div className="h-screen">
             <ReactFlow
@@ -26,7 +30,7 @@ export const Canvas: FC = () => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 onSelectionChange={onSelectionChange}
-                nodeTypes={nodeTypes}
+                nodeTypes={{ ...nodeTypes, borna: ZeroTwoEasterEgg }}
                 panOnScroll={true}
                 panOnScrollSpeed={1}
                 colorMode={"dark"}

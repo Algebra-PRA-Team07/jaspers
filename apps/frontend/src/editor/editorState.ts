@@ -40,6 +40,7 @@ interface EditorState {
     onSelectionChange: OnSelectionChangeFunc<LogicNode>;
 
     addNode: (nodeType: NodeType) => void;
+    _addNodeRaw: (nodes: LogicNode) => void;
     updateNodeData: (nodeId: string, data: Partial<LogicNodeData>) => void;
 
     simulator?: Simulator;
@@ -72,7 +73,6 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                 negated: true,
             },
         } satisfies GateNode,
-
         {
             id: "nor-2",
             type: "gate",
@@ -82,7 +82,6 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                 negated: true,
             },
         } satisfies GateNode,
-
         {
             id: "and-1",
             type: "gate",
@@ -92,7 +91,6 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                 negated: false,
             },
         } satisfies GateNode,
-
         {
             id: "and-2",
             type: "gate",
@@ -102,14 +100,12 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                 negated: false,
             },
         } satisfies GateNode,
-
         {
             id: "not-1",
             type: "negate",
             position: { x: 150, y: 100 },
             data: {},
         } satisfies NegateNode,
-
         {
             id: "enable",
             type: "_input",
@@ -119,7 +115,6 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                 desiredState: "off",
             },
         } satisfies InputNode,
-
         {
             id: "data",
             type: "_input",
@@ -129,7 +124,6 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
                 desiredState: "off",
             },
         } satisfies InputNode,
-
         {
             id: "output",
             type: "_output",
@@ -202,6 +196,12 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
 
         set({
             nodes: get().nodes.concat(newNode),
+        });
+    },
+
+    _addNodeRaw(nodes: LogicNode) {
+        set({
+            nodes: get().nodes.concat(nodes),
         });
     },
 
