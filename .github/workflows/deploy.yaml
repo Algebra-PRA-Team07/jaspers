@@ -1,4 +1,4 @@
-name: "🐳 Docker image build & push"
+name: "🐳 Build & deploy"
 
 on:
   push:
@@ -11,12 +11,20 @@ on:
       - "./.docker/**"
       - ".github/workflows/deploy.yaml"
 
+env:
+  IMAGE_NAME: ghcr.io/algebra-pra-team07/jaspers
+
 jobs:
   build:
     name: "🐳 Build & push"
-    runs-on: ubuntu-latest
     permissions:
-      packages: write 
+      packages: write
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-22.04-arm]
+    runs-on: ${{ matrix.os }}
+    env:
+      PLATFORM_ARCH: ${{ matrix.os == 'ubuntu-latest' && 'amd64' || 'arm64' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -36,6 +44,39 @@ jobs:
         with:
           push: true
           context: .
-          tags: ghcr.io/algebra-pra-team07/jaspers:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ env.IMAGE_NAME }}:${{ env.PLATFORM_ARCH }}-latest
+          platforms: linux/${{ env.PLATFORM_ARCH }}
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache-${{ env.PLATFORM_ARCH }}
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache-${{ env.PLATFORM_ARCH }},mode=max
+  manifest:
+    name: "📝 Manifest"
+    runs-on: ubuntu-latest
+    needs: [build]
+    permissions:
+      packages: write
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create and push manifest
+        run: |
+          docker buildx imagetools create -t ${{ env.IMAGE_NAME }}:latest \
+            ${{ env.IMAGE_NAME }}:amd64-latest \
+            ${{ env.IMAGE_NAME }}:arm64-latest
+  deploy:
+    name: "🚚 Deploy"
+    runs-on: "ubuntu-latest"
+    needs: [manifest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup SSH keys
+        run: mkdir -p ~/.ssh && echo '${{ secrets.SSH_PRIVATE_KEY }}' > ~/.ssh/id_rsa && chmod 0600 ~/.ssh/id_rsa
+      - name: Update on server
+        run: "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${{ secrets.SERVER_IP }} '~/start_scripts/jaspers_restart.sh'"
