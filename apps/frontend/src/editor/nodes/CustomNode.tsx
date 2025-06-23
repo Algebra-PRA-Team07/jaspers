@@ -1,5 +1,5 @@
 import { Edge, Handle, HandleType, NodeProps, Position } from "@xyflow/react";
-import { CSSProperties, FC } from "react";
+import React, { CSSProperties, FC } from "react";
 
 import {
     Tooltip,
@@ -63,7 +63,8 @@ export class CustomSimulatorNode extends SimulatorNode {
 }
 
 const gap = 20;
-const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = ({
+const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = React.memo(
+  ({
     pins,
     type,
     position,
