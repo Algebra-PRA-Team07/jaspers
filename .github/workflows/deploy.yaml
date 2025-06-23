@@ -1,4 +1,4 @@
-name: "🐳 Docker image build & push"
+name: "🐳 Build & deploy"
 
 on:
   push:
