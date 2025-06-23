@@ -1,5 +1,5 @@
 import { Edge, Handle, HandleType, NodeProps, Position } from "@xyflow/react";
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 
 import {
     Tooltip,
@@ -62,19 +62,19 @@ export class CustomSimulatorNode extends SimulatorNode {
     }
 }
 
+const gap = 20;
 const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = ({
     pins,
     type,
     position,
 }) => {
-    const start = 30;
-    const end = 70;
-
     return (
         <>
             {pins.map((pin, index) => {
-                const top =
-                    pins.length === 1 ? 50 : start + ((end - start) * index) / (pins.length - 1);
+                const handleStyle: CSSProperties = {
+                    top: "50%",
+                    transform: `translate(${position === Position.Left ? "-" : ""}50%, calc(${gap * index - (gap * (pins.length - 1)) / 2}px - 50%)`,
+                };
 
                 return (
                     <TooltipProvider key={pin.id} delayDuration={300}>
@@ -84,7 +84,7 @@ const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Posit
                                     id={pin.id}
                                     type={type}
                                     position={position}
-                                    style={{ top: `${top}%` }}
+                                    style={handleStyle}
                                 />
                             </TooltipTrigger>
                             <TooltipContent>{pin.name}</TooltipContent>
@@ -99,7 +99,12 @@ const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Posit
 export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) => {
     return (
         <>
-            <BaseNode selected={selected}>{data.name}</BaseNode>
+            <BaseNode
+                selected={selected}
+                numberOfEdges={Math.max(data.inputs.length, data.outputs.length)}
+            >
+                {data.name}
+            </BaseNode>
             <HandleGroup pins={data.inputs} type={"target"} position={Position.Left} />
             <HandleGroup pins={data.outputs} type={"source"} position={Position.Right} />
         </>
