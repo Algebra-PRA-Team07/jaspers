@@ -3,7 +3,8 @@ import "@xyflow/react/dist/style.css";
 import { Background, Controls, ReactFlow } from "@xyflow/react";
 import { FC, useMemo } from "react";
 
-import { ZeroTwoEasterEgg } from "@/components/ZeroTwoEasterEgg.tsx";
+import { SkibidiEasterEgg } from "@/editor/easterEggs/SkibidiEasterEgg.tsx";
+import { ZeroTwoEasterEgg } from "@/editor/easterEggs/ZeroTwoEasterEgg.tsx";
 import { REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
 import { useEasterEgg } from "@/hooks/useEasterEgg.ts";
 
@@ -23,6 +24,7 @@ export const Canvas: FC = () => {
         () => ({
             ...nodeTypes,
             borna: ZeroTwoEasterEgg,
+            skibidi: SkibidiEasterEgg,
         }),
         [],
     );

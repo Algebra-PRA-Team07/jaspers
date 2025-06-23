@@ -2,27 +2,42 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useEditorState } from "@/editor/editorState.ts";
 
+const DEFAULT_NODE = {
+    position: {
+        x: 200,
+        y: 200,
+    },
+    data: {},
+};
+
 export const useEasterEgg = () => {
     const listenerReference = useRef<(event: KeyboardEvent) => void | null>(null);
-    const [keyState, setKeyState] = useState<string[]>([]);
+    const [keyState, setKeyState] = useState<string>("");
     const addNode = useEditorState.use._addNodeRaw();
 
     const onKeyPress = useCallback(
         (key: string) => {
-            const newKeyState =
-                keyState.length >= 3 ? [...keyState.slice(-2), key] : [...keyState, key];
+            if (key.length !== 1) return;
+
+            const newKeyState = keyState.length >= 3 ? keyState.slice(-3) + key : keyState + key;
 
             setKeyState(newKeyState);
 
-            if (newKeyState.join("").slice(-3) === "a02") {
+            if (newKeyState.endsWith("a02")) {
                 addNode({
                     id: "02",
                     type: "borna",
-                    position: {
-                        x: 0,
-                        y: 0,
-                    },
-                    data: {},
+                    ...DEFAULT_NODE,
+                });
+
+                return;
+            }
+
+            if (newKeyState.endsWith("skib")) {
+                addNode({
+                    id: "skibidi",
+                    type: "skibidi",
+                    ...DEFAULT_NODE,
                 });
             }
         },
