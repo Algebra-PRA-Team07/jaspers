@@ -64,38 +64,35 @@ export class CustomSimulatorNode extends SimulatorNode {
 
 const gap = 20;
 const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = React.memo(
-  ({
-    pins,
-    type,
-    position,
-}) => {
-    return (
-        <>
-            {pins.map((pin, index) => {
-                const handleStyle: CSSProperties = {
-                    top: "50%",
-                    transform: `translate(${position === Position.Left ? "-" : ""}50%, calc(${gap * index - (gap * (pins.length - 1)) / 2}px - 50%)`,
-                };
+    ({ pins, type, position }) => {
+        return (
+            <>
+                {pins.map((pin, index) => {
+                    const handleStyle: CSSProperties = {
+                        top: "50%",
+                        transform: `translate(${position === Position.Left ? "-" : ""}50%, calc(${gap * index - (gap * (pins.length - 1)) / 2}px - 50%)`,
+                    };
 
-                return (
-                    <TooltipProvider key={pin.id} delayDuration={300}>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Handle
-                                    id={pin.id}
-                                    type={type}
-                                    position={position}
-                                    style={handleStyle}
-                                />
-                            </TooltipTrigger>
-                            <TooltipContent>{pin.name}</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                );
-            })}
-        </>
-    );
-};
+                    return (
+                        <TooltipProvider key={pin.id} delayDuration={300}>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Handle
+                                        id={pin.id}
+                                        type={type}
+                                        position={position}
+                                        style={handleStyle}
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent>{pin.name}</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    );
+                })}
+            </>
+        );
+    },
+);
 
 export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) => {
     return (
