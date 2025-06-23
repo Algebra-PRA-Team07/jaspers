@@ -1,7 +1,7 @@
 import "@xyflow/react/dist/style.css";
 
 import { Background, Controls, ReactFlow } from "@xyflow/react";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { ZeroTwoEasterEgg } from "@/components/ZeroTwoEasterEgg.tsx";
 import { REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
@@ -19,6 +19,14 @@ export const Canvas: FC = () => {
     const onConnect = useEditorState.use.onConnect();
     const onSelectionChange = useEditorState.use.onSelectionChange();
 
+    const nodeTypesWithEasterEgg = useMemo(
+        () => ({
+            ...nodeTypes,
+            borna: ZeroTwoEasterEgg,
+        }),
+        [],
+    );
+
     useEasterEgg();
 
     return (
@@ -30,7 +38,7 @@ export const Canvas: FC = () => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 onSelectionChange={onSelectionChange}
-                nodeTypes={{ ...nodeTypes, borna: ZeroTwoEasterEgg }}
+                nodeTypes={nodeTypesWithEasterEgg}
                 panOnScroll={true}
                 panOnScrollSpeed={1}
                 colorMode={"dark"}
