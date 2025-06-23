@@ -67,14 +67,11 @@ jobs:
             ${{ env.IMAGE_NAME }}:amd64-latest \
             ${{ env.IMAGE_NAME }}:arm64-latest
           
-          docker manifest annotate ${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:amd64-latest --arch amd64
-          docker manifest annotate ${{ env.IMAGE_NAME }}latest ${{ env.IMAGE_NAME }}:arm64-latest --arch arm64
-          
           docker manifest push ${{ env.IMAGE_NAME }}:latest
   deploy:
     name: "🚚 Deploy"
     runs-on: "ubuntu-latest"
-    needs: [build]
+    needs: [manifest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
