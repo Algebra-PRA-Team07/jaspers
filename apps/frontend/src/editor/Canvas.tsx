@@ -1,8 +1,9 @@
 import "@xyflow/react/dist/style.css";
 
-import { Background, Controls, ReactFlow } from "@xyflow/react";
+import { Background, Controls, DefaultEdgeOptions, ReactFlow } from "@xyflow/react";
 import { FC, useMemo } from "react";
 
+import { CustomEdge } from "@/editor/CustomEdge.tsx";
 import { StickerNode } from "@/editor/easterEggs/StickerNode.tsx";
 import { REGISTERED_NODES_PROPERTIES } from "@/editor/nodes/nodes.ts";
 import { useStickerHandler } from "@/hooks/useStickerHandler.ts";
@@ -10,6 +11,10 @@ import { useStickerHandler } from "@/hooks/useStickerHandler.ts";
 import { useEditorState } from "./editorState.ts";
 
 const nodeTypes = REGISTERED_NODES_PROPERTIES["component"];
+
+const edgeTypes = {
+    "custom-edge": CustomEdge,
+};
 
 export const Canvas: FC = () => {
     const nodes = useEditorState.use.nodes();
@@ -27,6 +32,13 @@ export const Canvas: FC = () => {
         [],
     );
 
+    const defaultEdgeOptions: DefaultEdgeOptions = useMemo(
+        () => ({
+            type: "custom-edge",
+        }),
+        [],
+    );
+
     useStickerHandler();
 
     return (
@@ -39,9 +51,11 @@ export const Canvas: FC = () => {
                 onConnect={onConnect}
                 onSelectionChange={onSelectionChange}
                 nodeTypes={nodeTypesWithEasterEgg}
+                edgeTypes={edgeTypes}
                 panOnScroll={true}
                 panOnScrollSpeed={1}
                 colorMode={"dark"}
+                defaultEdgeOptions={defaultEdgeOptions}
             >
                 <Background />
                 <Controls position="bottom-right" />

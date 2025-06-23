@@ -24,7 +24,7 @@ import { LogicNode, LogicNodeData } from "./types.ts";
 
 type SimulatorState = "stopped" | "paused" | "running";
 
-interface EditorState {
+export interface EditorState {
     simulatorState: SimulatorState;
 
     showProperties: boolean;
