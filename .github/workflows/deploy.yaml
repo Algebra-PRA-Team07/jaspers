@@ -16,7 +16,7 @@ jobs:
     name: "🐳 Build & push"
     runs-on: ubuntu-latest
     permissions:
-      packages: write 
+      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,3 +39,13 @@ jobs:
           tags: ghcr.io/algebra-pra-team07/jaspers:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  deploy:
+    name: "🚚 Deploy"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup SSH keys
+        run: mkdir -p ~/.ssh && echo '${{ secrets.SSH_PRIVATE_KEY }}' > ~/.ssh/id_rsa && chmod 0600 ~/.ssh/id_rsa
+      - name: Update on server
+        run: "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${{ secrets.SERVER_IP }} -f '~/start_scripts/jaspers_restart.sh'"
