@@ -11,10 +11,9 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand/react";
 
+import { Example } from "@/editor/examples.ts";
 import { CustomNode, CustomNodeData } from "@/editor/nodes/CustomNode.tsx";
-import { GateNode } from "@/editor/nodes/GateNode.tsx";
 import { InputNode } from "@/editor/nodes/InputNode.tsx";
-import { NegateNode } from "@/editor/nodes/NegateNode.tsx";
 import { Nodes, NodeType } from "@/editor/nodes/nodes.ts";
 import { OutputNode } from "@/editor/nodes/OutputNode.tsx";
 import { createSelectors } from "@/lib/zustand.ts";
@@ -53,6 +52,8 @@ export interface EditorState {
     customNodes: CustomNodeData[];
     addCustomNode: (customNode: CustomNodeData) => void;
     createCustomNode: (name: string) => void;
+
+    loadExample: (example: Example) => void;
 }
 
 const useEditorStateBase = create<EditorState>((set, get) => ({
@@ -63,103 +64,8 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
         set({ showProperties: !get().showProperties });
     },
 
-    nodes: [
-        {
-            id: "nor-1",
-            type: "gate",
-            position: { x: 450, y: 100 },
-            data: {
-                gateType: "OR",
-                negated: true,
-            },
-        } satisfies GateNode,
-        {
-            id: "nor-2",
-            type: "gate",
-            position: { x: 450, y: 300 },
-            data: {
-                gateType: "OR",
-                negated: true,
-            },
-        } satisfies GateNode,
-        {
-            id: "and-1",
-            type: "gate",
-            position: { x: 300, y: 100 },
-            data: {
-                gateType: "AND",
-                negated: false,
-            },
-        } satisfies GateNode,
-        {
-            id: "and-2",
-            type: "gate",
-            position: { x: 300, y: 300 },
-            data: {
-                gateType: "AND",
-                negated: false,
-            },
-        } satisfies GateNode,
-        {
-            id: "not-1",
-            type: "negate",
-            position: { x: 150, y: 100 },
-            data: {},
-        } satisfies NegateNode,
-        {
-            id: "enable",
-            type: "_input",
-            position: { x: 200, y: 200 },
-            data: {
-                name: "Enable",
-                desiredState: "off",
-            },
-        } satisfies InputNode,
-        {
-            id: "data",
-            type: "_input",
-            position: { x: 35, y: 200 },
-            data: {
-                name: "Data",
-                desiredState: "off",
-            },
-        } satisfies InputNode,
-        {
-            id: "output",
-            type: "_output",
-            position: { x: 600, y: 100 },
-            data: {
-                name: "Output",
-            },
-        } satisfies OutputNode,
-    ].map((it) => ({
-        ...it,
-        position: {
-            x: it.position.x + 400,
-            y: it.position.y + 200,
-        },
-    })),
-    edges: [
-        { id: nanoid(), source: "nor-1", sourceHandle: "out", target: "nor-2", targetHandle: "a" },
-        { id: nanoid(), source: "nor-2", sourceHandle: "out", target: "nor-1", targetHandle: "b" },
-        { id: nanoid(), source: "and-1", sourceHandle: "out", target: "nor-1", targetHandle: "a" },
-        { id: nanoid(), source: "and-2", sourceHandle: "out", target: "nor-2", targetHandle: "b" },
-        { id: nanoid(), source: "not-1", sourceHandle: "out", target: "and-1", targetHandle: "a" },
-
-        { id: nanoid(), source: "enable", sourceHandle: "out", target: "and-1", targetHandle: "b" },
-        { id: nanoid(), source: "enable", sourceHandle: "out", target: "and-2", targetHandle: "a" },
-
-        { id: nanoid(), source: "data", sourceHandle: "out", target: "not-1", targetHandle: "in" },
-        { id: nanoid(), source: "data", sourceHandle: "out", target: "and-2", targetHandle: "b" },
-
-        {
-            id: nanoid(),
-            source: "nor-1",
-            sourceHandle: "out",
-            target: "output",
-            targetHandle: "in",
-        },
-    ],
+    nodes: [],
+    edges: [],
     selectedNodes: [],
 
     onNodesChange: (changes) => {
@@ -340,6 +246,13 @@ const useEditorStateBase = create<EditorState>((set, get) => ({
             edges: get().edges.filter((edge) => !edges.includes(edge)),
 
             customNodes: get().customNodes.concat(customNodeData),
+        });
+    },
+
+    loadExample: (example: Example) => {
+        set({
+            nodes: example.nodes,
+            edges: example.edges,
         });
     },
 }));

@@ -20,6 +20,7 @@ import {
     MenubarTrigger,
 } from "@/components/ui/menubar.tsx";
 import { useEditorState } from "@/editor/editorState.ts";
+import { EXAMPLES } from "@/editor/examples.ts";
 import { useAuthUserUsklicnik } from "@/hooks/useAuthUserUsklicnik.ts";
 import { useLogout } from "@/hooks/useLogout.ts";
 
@@ -107,6 +108,23 @@ const View: FC = () => {
     );
 };
 
+const Examples: FC = () => {
+    const loadExample = useEditorState.use.loadExample();
+
+    return (
+        <MenubarMenu>
+            <MenubarTrigger>Examples</MenubarTrigger>
+            <MenubarContent>
+                {EXAMPLES.map((example, index) => (
+                    <MenubarItem key={index} onClick={() => loadExample(example)}>
+                        <strong>{index + 1}.&nbsp;</strong> {example.name}
+                    </MenubarItem>
+                ))}
+            </MenubarContent>
+        </MenubarMenu>
+    );
+};
+
 export const Menu: FC = () => {
     const logout = useLogout();
 
@@ -136,6 +154,8 @@ export const Menu: FC = () => {
                     </MenubarMenu>
 
                     <View />
+
+                    <Examples />
                 </div>
 
                 <div className="flex flex-1 justify-center space-x-4">
@@ -148,7 +168,7 @@ export const Menu: FC = () => {
                     <MenubarMenu>
                         <MenubarTrigger>
                             <span>
-                                Welcome <span className={"font-bold"}>{user.name}</span>
+                                Welcome <span className={"font-bold"}>{user?.name}</span>
                             </span>
                         </MenubarTrigger>
                         <MenubarContent>
