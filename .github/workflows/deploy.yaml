@@ -14,9 +14,14 @@ on:
 jobs:
   build:
     name: "🐳 Build & push"
-    runs-on: ubuntu-latest
     permissions:
       packages: write
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    env:
+      DOCKER_PLATFORM: ${{ matrix.os == 'ubuntu-latest' && 'linux/amd64' || 'linux/arm64' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,12 +42,13 @@ jobs:
           push: true
           context: .
           tags: ghcr.io/algebra-pra-team07/jaspers:latest
+          platforms: ${{ env.DOCKER_PLATFORM }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
   deploy:
     name: "🚚 Deploy"
     runs-on: "ubuntu-latest"
-    needs: ["build"]
+    needs: [ "build" ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
