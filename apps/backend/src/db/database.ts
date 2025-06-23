@@ -10,6 +10,6 @@ export const database = drizzle(Globals.databaseUrl, { schema });
 
 export const initDatabase = async () => {
     await migrate(database, {
-        migrationsFolder: "./migrations",
+        migrationsFolder: "./drizzle",
     });
 };

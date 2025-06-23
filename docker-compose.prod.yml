@@ -1,0 +1,33 @@
+# example docker compose
+
+services:
+  jaspers:
+    image: ghcr.io/algebra-pra-team07/jaspers:latest
+    ports:
+      - 8000:80
+    depends_on:
+      postgres:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://postgres:${PG_PASSWORD}@postgres:5432/jaspers
+      OIDC_CONFIGURATION_URL: ${OIDC_CONFIG_URL}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      OIDC_REDIRECT_URI: ${OIDC_REDIRECT_URI}
+      OIDC_SCOPES: openid,email,profile
+      JWT_SECRET: very_secure_jwt_secret_trust 
+  
+  # database
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: jaspers
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  pg-data:
