@@ -1,5 +1,5 @@
 import { Edge, Handle, HandleType, NodeProps, Position } from "@xyflow/react";
-import { FC } from "react";
+import React, { FC } from "react";
 
 import {
     Tooltip,
@@ -62,39 +62,39 @@ export class CustomSimulatorNode extends SimulatorNode {
     }
 }
 
-const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = ({
-    pins,
-    type,
-    position,
-}) => {
-    const start = 30;
-    const end = 70;
+const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = React.memo(
+    ({ pins, type, position }) => {
+        const start = 30;
+        const end = 70;
 
-    return (
-        <>
-            {pins.map((pin, index) => {
-                const top =
-                    pins.length === 1 ? 50 : start + ((end - start) * index) / (pins.length - 1);
+        return (
+            <>
+                {pins.map((pin, index) => {
+                    const top =
+                        pins.length === 1
+                            ? 50
+                            : start + ((end - start) * index) / (pins.length - 1);
 
-                return (
-                    <TooltipProvider key={pin.id} delayDuration={300}>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Handle
-                                    id={pin.id}
-                                    type={type}
-                                    position={position}
-                                    style={{ top: `${top}%` }}
-                                />
-                            </TooltipTrigger>
-                            <TooltipContent>{pin.name}</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                );
-            })}
-        </>
-    );
-};
+                    return (
+                        <TooltipProvider key={pin.id} delayDuration={300}>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Handle
+                                        id={pin.id}
+                                        type={type}
+                                        position={position}
+                                        style={{ top: `${top}%` }}
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent>{pin.name}</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    );
+                })}
+            </>
+        );
+    },
+);
 
 export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) => {
     return (
