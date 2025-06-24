@@ -12,7 +12,7 @@ import { InputNode } from "@/editor/nodes/InputNode.tsx";
 import { Simulator } from "@/editor/simulation/simulator.ts";
 import { EdgeStates, LogicNode, LogicNodeData, SimulatorNode } from "@/editor/types.ts";
 
-type PinDefinition = { id: string; name: string };
+type HandleDefinition = { id: string; name: string };
 
 export interface CustomNodeData extends LogicNodeData {
     id: string;
@@ -21,8 +21,8 @@ export interface CustomNodeData extends LogicNodeData {
     nodes: LogicNode[];
     edges: Edge[];
 
-    inputs: PinDefinition[]; // Input nodes
-    outputs: PinDefinition[]; // Output nodes
+    inputs: HandleDefinition[]; // Input nodes
+    outputs: HandleDefinition[]; // Output nodes
 }
 
 export type CustomNode = LogicNode<CustomNodeData, "custom">;
@@ -62,8 +62,8 @@ export class CustomSimulatorNode extends SimulatorNode {
     }
 }
 
-const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = React.memo(
-    ({ pins, type, position }) => {
+const HandleGroup: FC<{ pins: HandleDefinition[]; type: HandleType; position: Position }> =
+    React.memo(({ pins, type, position }) => {
         const style: CSSProperties = {
             position: "unset",
             transform: `translate(${position === Position.Left ? "-50%" : "50%"}, 0)`,
@@ -90,8 +90,7 @@ const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Posit
                 })}
             </>
         );
-    },
-);
+    });
 
 export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) => {
     return (
