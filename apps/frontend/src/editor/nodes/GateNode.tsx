@@ -57,11 +57,7 @@ export const GateNodeComponent = ({ selected, data }: NodeProps<GateNode>) => {
 
     return (
         <>
-            <BaseNode
-                logicState={data.simulator?.output["out"]}
-                selected={selected}
-                numberOfEdges={2}
-            >
+            <BaseNode logicState={data.simulator?.output["out"]} selected={selected}>
                 {gateName}
             </BaseNode>
             <Handle id={"a"} type="target" position={Position.Left} style={{ top: "30%" }} />

@@ -62,17 +62,16 @@ export class CustomSimulatorNode extends SimulatorNode {
     }
 }
 
-const gap = 20;
 const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = React.memo(
     ({ pins, type, position }) => {
+        const style: CSSProperties = {
+            position: "unset",
+            transform: `translate(${position === Position.Left ? "-50%" : "50%"}, 0)`,
+        };
+
         return (
             <>
-                {pins.map((pin, index) => {
-                    const handleStyle: CSSProperties = {
-                        top: "50%",
-                        transform: `translate(${position === Position.Left ? "-" : ""}50%, calc(${gap * index - (gap * (pins.length - 1)) / 2}px - 50%)`,
-                    };
-
+                {pins.map((pin) => {
                     return (
                         <TooltipProvider key={pin.id} delayDuration={300}>
                             <Tooltip>
@@ -81,7 +80,7 @@ const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Posit
                                         id={pin.id}
                                         type={type}
                                         position={position}
-                                        style={handleStyle}
+                                        style={style}
                                     />
                                 </TooltipTrigger>
                                 <TooltipContent>{pin.name}</TooltipContent>
@@ -96,15 +95,18 @@ const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Posit
 
 export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) => {
     return (
-        <>
-            <BaseNode
-                selected={selected}
-                numberOfEdges={Math.max(data.inputs.length, data.outputs.length)}
-            >
-                {data.name}
-            </BaseNode>
-            <HandleGroup pins={data.inputs} type={"target"} position={Position.Left} />
-            <HandleGroup pins={data.outputs} type={"source"} position={Position.Right} />
-        </>
+        <div className="grid">
+            <div className="col-start-1 row-start-1">
+                <BaseNode selected={selected} className={"w-full h-full grid place-items-center"}>
+                    {data.name}
+                </BaseNode>
+            </div>
+            <div className="col-start-1 row-start-1 w-full h-full py-2 flex flex-col gap-2 justify-center">
+                <HandleGroup pins={data.inputs} type={"target"} position={Position.Left} />
+            </div>
+            <div className="col-start-1 row-start-1 w-full h-full py-2 flex flex-col gap-2 justify-center items-end">
+                <HandleGroup pins={data.outputs} type={"source"} position={Position.Right} />
+            </div>
+        </div>
     );
 };
