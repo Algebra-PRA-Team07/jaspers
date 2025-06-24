@@ -1,5 +1,5 @@
 import { Edge, Handle, HandleType, NodeProps, Position } from "@xyflow/react";
-import React, { FC } from "react";
+import React, { CSSProperties, FC } from "react";
 
 import {
     Tooltip,
@@ -12,7 +12,7 @@ import { InputNode } from "@/editor/nodes/InputNode.tsx";
 import { Simulator } from "@/editor/simulation/simulator.ts";
 import { EdgeStates, LogicNode, LogicNodeData, SimulatorNode } from "@/editor/types.ts";
 
-type PinDefinition = { id: string; name: string };
+type HandleDefinition = { id: string; name: string };
 
 export interface CustomNodeData extends LogicNodeData {
     id: string;
@@ -21,8 +21,8 @@ export interface CustomNodeData extends LogicNodeData {
     nodes: LogicNode[];
     edges: Edge[];
 
-    inputs: PinDefinition[]; // Input nodes
-    outputs: PinDefinition[]; // Output nodes
+    inputs: HandleDefinition[]; // Input nodes
+    outputs: HandleDefinition[]; // Output nodes
 }
 
 export type CustomNode = LogicNode<CustomNodeData, "custom">;
@@ -62,19 +62,16 @@ export class CustomSimulatorNode extends SimulatorNode {
     }
 }
 
-const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Position }> = React.memo(
-    ({ pins, type, position }) => {
-        const start = 30;
-        const end = 70;
+const HandleGroup: FC<{ pins: HandleDefinition[]; type: HandleType; position: Position }> =
+    React.memo(({ pins, type, position }) => {
+        const style: CSSProperties = {
+            position: "unset",
+            transform: `translate(${position === Position.Left ? "-50%" : "50%"}, 0)`,
+        };
 
         return (
             <>
-                {pins.map((pin, index) => {
-                    const top =
-                        pins.length === 1
-                            ? 50
-                            : start + ((end - start) * index) / (pins.length - 1);
-
+                {pins.map((pin) => {
                     return (
                         <TooltipProvider key={pin.id} delayDuration={300}>
                             <Tooltip>
@@ -83,7 +80,7 @@ const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Posit
                                         id={pin.id}
                                         type={type}
                                         position={position}
-                                        style={{ top: `${top}%` }}
+                                        style={style}
                                     />
                                 </TooltipTrigger>
                                 <TooltipContent>{pin.name}</TooltipContent>
@@ -93,15 +90,22 @@ const HandleGroup: FC<{ pins: PinDefinition[]; type: HandleType; position: Posit
                 })}
             </>
         );
-    },
-);
+    });
 
 export const CustomNodeComponent = ({ selected, data }: NodeProps<CustomNode>) => {
     return (
-        <>
-            <BaseNode selected={selected}>{data.name}</BaseNode>
-            <HandleGroup pins={data.inputs} type={"target"} position={Position.Left} />
-            <HandleGroup pins={data.outputs} type={"source"} position={Position.Right} />
-        </>
+        <div className="grid">
+            <div className="col-start-1 row-start-1">
+                <BaseNode selected={selected} className={"w-full h-full grid place-items-center"}>
+                    {data.name}
+                </BaseNode>
+            </div>
+            <div className="col-start-1 row-start-1 w-full h-full py-2 flex flex-col gap-2 justify-center">
+                <HandleGroup pins={data.inputs} type={"target"} position={Position.Left} />
+            </div>
+            <div className="col-start-1 row-start-1 w-full h-full py-2 flex flex-col gap-2 justify-center items-end">
+                <HandleGroup pins={data.outputs} type={"source"} position={Position.Right} />
+            </div>
+        </div>
     );
 };
