@@ -23,6 +23,8 @@ jobs:
       - name: Rebase and push
         run: |
           # hope no conflicts lol
+          git branch
+          git checkout examples
           git rebase origin master
           git push origin examples --force
     
